@@ -32,6 +32,7 @@ class Receipts extends CI_Controller{
 			 ->display_as('purpose','Purpose')
 			 ->display_as('mode_payment', 'Mode of Payment')
 			 ->unset_add()
+			 ->unset_delete()
 			 ->order_by('id','desc')
 			 //->callback_column('pmt_details',array($this,'_callback_reduce_width'))
 			 ->callback_column('address',array($this,'_callback_reduce_width'))

@@ -5,7 +5,7 @@ class Misc extends CI_Controller{
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('url');
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 		$this->load->library('session');
 		$this->load->model('mlist_model');
 		$this->load->dbutil();
