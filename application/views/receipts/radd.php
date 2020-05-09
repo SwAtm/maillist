@@ -1,5 +1,6 @@
 <?php
 //called by receipts/radd
+//echo IMGPATH;
 echo validation_errors();
 echo form_open('receipts/radd',array('id'=>'donation'),$donor);
 echo "<table border=1 align=center>";

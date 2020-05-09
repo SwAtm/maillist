@@ -37,7 +37,9 @@ class Mlist extends CI_Controller{
 			 ->field_type('initiated','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('japayajna','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('lang','dropdown', array('K'=>'Kannada', 'E'=>'English'))
-			 ->add_action('Receipt',base_url('application/rupee1.png'),'receipts/radd')
+			 //->add_action('receipt',base_url('application/rupee1.png'),'receipts/radd')
+			 //->add_action('receipt',base_url('../web_images/rupee1.png'),'receipts/radd')
+			 ->add_action('receipt',base_url(IMGPATH.'rupee1.png'),'receipts/radd')
 			 ->callback_before_insert(array($this,'toupper'))
 			 ->callback_before_update(array($this,'toupper'));
 			$output = $crud->render();

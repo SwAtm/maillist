@@ -37,7 +37,8 @@ class Receipts extends CI_Controller{
 			 //->callback_column('pmt_details',array($this,'_callback_reduce_width'))
 			 ->callback_column('address',array($this,'_callback_reduce_width'))
 			 ->callback_column('name',array($this,'_callback_reduce_width'))
-			 ->add_action('Print',base_url('application/print.png'),'receipts/rprint');
+			 //->add_action('Print',base_url('application/print.png'),'receipts/rprint');
+			 ->add_action('Print',base_url(IMGPATH.'print.png'),'receipts/rprint');
 			 //->add_action('Print',base_url('application/print.png'),'', '',array($this, 'url_callback_rprint'));
 				$crud->field_type('id', 'readonly');
 				$crud->field_type('series', 'readonly');
