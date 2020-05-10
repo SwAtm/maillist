@@ -29,7 +29,8 @@ echo "<tr><td>";
 if (null!==$this->session->logged AND $this->session->logged=='admin'):
 		echo "Logged in as ".$this->session->logged."<a href=".site_url('login/logout')."> Log Out</a>";
 else:
-echo "Logged in as Guest. Log in as <a href=".site_url('login/index')."> Admin</a>";
+//echo "Logged in as Guest. Log in as <a href=".site_url('login/index')."> Admin</a>";
+echo '';
 endif;
 echo "</td></tr></table>";
 

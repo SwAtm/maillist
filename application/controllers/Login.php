@@ -32,10 +32,13 @@ else:
 	//print_r($pwd);
 	//compare with input
 		//if ($pwd['pwd']==password_hash($_POST['pwd'], PASSWORD_DEFAULT)):
+		
 		if(password_verify($_POST['pwd'],$pwd['pwd'])):
 			//redirect to admin menu
 		$this->session->logged='admin';
 		$this->home();
+		//$this->load->view('templates/header');
+		//$this->load->view('templates/menu_admin');
 		else:
 		$data['err']="Wrong Password<br>";
 		$this->load->view('templates/header');
@@ -50,18 +53,20 @@ endif;
 	
 	public function home(){
 		
-		$this->load->view('templates/header');
+		
 		if (null!==$this->session->logged AND $this->session->logged=='admin'):
+		$this->load->view('templates/header');
 		$this->load->view('templates/menu_admin');
 		else:
-		$this->load->view('templates/menu_guest');
+		//$this->load->view('templates/menu_guest');
+		$this->index();
 		endif;
 	}
-	
+
 	public function logout(){
 		unset ($_SESSION['logged']);
 		$this->session->sess_destroy();
-		$this->home();
+		$this->index();
 }	
 }
 ?>

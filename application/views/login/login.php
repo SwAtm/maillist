@@ -28,7 +28,7 @@ echo form_open('login/verify');
 <input type='submit' name='submit' value='Submit'><br><br>
 <?php
 echo form_close();
-echo "Not Admin? Log-in as <a href=".site_url('login/home').">Guest</a>";
+//echo "Not Admin? Log-in as <a href=".site_url('login/home').">Guest</a>";
 ?>
 <h1 style="color:blue">Login page</h1>
 </div>
