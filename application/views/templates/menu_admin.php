@@ -1,6 +1,6 @@
 <?php
 Print "<table border=1 width=100% cellpadding=5 cellspacing=0>";
-Print "<tr bgcolor=magenta><td valign=center align=middle>";
+Print "<tr bgcolor=magenta><td width=25% valign=middle align=center>";
 ?>
 
 <script language="JavaScript">
@@ -17,7 +17,7 @@ window.location.href=url
 <select name="selectname" size="1" onChange="pulldown_mlist()">
 <option value="">LIST</option>
 <option value="mlist/list_admin"> View List
-<!--<option value="mlist/check_length"> Check List-->
+<option value="mlist/check_length"> Check List
 <!--<option value="opd/get_id_edit"> Edit
 <option value="opd/get_id_print"> Print OPD Slip
 <option value="opd/get_date_view"> View A day's Table
@@ -26,7 +26,7 @@ window.location.href=url
 </form>
 <?php
 Print "</td>";
-Print "<td  valign=centre align=middle>";
+Print "<td  width=25% valign=middle align=center>";
 ?>
 
 
@@ -43,13 +43,17 @@ window.location.href=url
 <form name="labels">
 <select name="selectname" size="1" onChange="pulldown_labels()">
 <option value=""> Labels</option>
-<!--<option value="mlist/labels_blore">Bangalore
-<option value="mlist/labels_bgm">Belgaum Dist-->
+<option value="mlist/labels_blore">Bangalore
+<option value="mlist/labels_bgm">Belgaum
+<option value="mlist/labels_bgm_dist">Belgaum District
+<option value="mlist/labels_kar">Karnataka
+<option value="mlist/labels_ind">India
+
 </select>
 </form>
 <?php
 Print "</td>";
-Print "<td  valign=centre align=middle>";
+Print "<td  width=25% valign=middle align=center>";
 ?>
 
 <script language="JavaScript">
@@ -77,7 +81,7 @@ window.location.href=url
 Print "</td>";
 
 
-Print "<td  valign=centre align=middle>";
+Print "<td  width=25% valign=middle align=center>";
 ?>
 <script language="JavaScript">
 function pulldown_misc()

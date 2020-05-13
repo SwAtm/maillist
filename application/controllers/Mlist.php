@@ -13,6 +13,7 @@ class Mlist extends CI_Controller{
 		$this->load->model('state_model');
 		$this->load->model('district_model');
 		$this->load->model('country_model');
+		$this->load->helper('pdf_helper');
 }
 
 	public function list_admin()
@@ -141,7 +142,7 @@ class Mlist extends CI_Controller{
 	echo "</pre>";
 	*/
 }
-	
+	//not necessary, the option is removed
 	public function list_guest()
 	{
 	$crud = new grocery_CRUD();
@@ -161,8 +162,43 @@ class Mlist extends CI_Controller{
 	
 	}
 	
+		public function labels_blore()
+		{
+		$data['addresses']=$this->mlist_model->getblore();
+		$data['place']='Bangalore';
+		$this->load->view('mlist/lables',$data);
+		$this->load->view('templates/header');
+		$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");
+		
+		
+		}
+		
+		
+		
+		public function labels_bgm()
+		{
+		$data['addresses']=$this->mlist_model->getbgm();
+		$data['place']='Belgaum';
+		$this->load->view('mlist/lables',$data);
+		$this->load->view('templates/header');
+		$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");
+
+		}
+		
+		public function labels_bgm_dist()
+		{
+		}
+		
+		public function labels_kar()
+		{
+		}	
+		
+		
+		public function labels_ind()
+		{
+		}	
 	
 
 
 }
-
+?>
