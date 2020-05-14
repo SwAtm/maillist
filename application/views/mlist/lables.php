@@ -12,6 +12,11 @@ $pdf->AddPage();
 $pdf->SetFont($font,'',$fs);
 $col=0;
 foreach ($addresses as $data):
+
+if ($data['pin']==null||$data['pin']==0):
+$data['pin']='';
+endif;
+
 if ($data['city']==''):
 	$data['city']="PIN: ";
 else:

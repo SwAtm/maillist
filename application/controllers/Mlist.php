@@ -60,7 +60,7 @@ class Mlist extends CI_Controller{
 	public function toupper($post_array)
 	{
 	foreach ($post_array as $k=>$v):
-	$post_array[$k]=ucwords($v);
+	$post_array[$k]=strtoupper($v);
 	endforeach;
 	return $post_array;
 	}
@@ -187,15 +187,33 @@ class Mlist extends CI_Controller{
 		
 		public function labels_bgm_dist()
 		{
+		$data['addresses']=$this->mlist_model->getbgm_dist();
+		$data['place']='Belgaum_Dist';
+		$this->load->view('mlist/lables',$data);
+		$this->load->view('templates/header');
+		$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");
+
 		}
 		
 		public function labels_kar()
 		{
+		$data['addresses']=$this->mlist_model->getkar();
+		$data['place']='Karnataka';
+		$this->load->view('mlist/lables',$data);
+		$this->load->view('templates/header');
+		$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");
+
 		}	
 		
 		
 		public function labels_ind()
 		{
+		$data['addresses']=$this->mlist_model->getindia();
+		$data['place']='India';
+		$this->load->view('mlist/lables',$data);
+		$this->load->view('templates/header');
+		$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");	
+			
 		}	
 	
 

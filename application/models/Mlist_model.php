@@ -54,6 +54,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('city','BANGALORE');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
@@ -67,10 +68,51 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('city','BELGAUM');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
 	
+	
+		public function getbgm_dist()
+		//called by mlist/labels_bgm_dist
+	{
+		$sql=$this->db->select ('id, hon , name, add1, add2, add3, add4, city, pin');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('dist','BELGAUM');
+		$sql=$this->db->where('deleted','N');
+		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('pin','ASC');
+		$sql=$this->db->get();
+		return $sql->result_array();
+	}
+	
+		public function getkar()
+		//called by mlist/labels_kar
+	{
+		$sql=$this->db->select ('id, hon , name, add1, add2, add3, add4, city, pin');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('state','KARNATAKA');
+		$sql=$this->db->where('deleted','N');
+		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('pin','ASC');
+		$sql=$this->db->get();
+		return $sql->result_array();
+	}
+	
+		public function getindia()
+		//called by mlist/labels_ind
+	{
+		$sql=$this->db->select ('id, hon , name, add1, add2, add3, add4, city, pin');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('country','INDIA');
+		$sql=$this->db->where('deleted','N');
+		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('pin','ASC');
+		$sql=$this->db->get();
+		return $sql->result_array();
+	}
+
 	
 }
 ?>
