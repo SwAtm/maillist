@@ -7,7 +7,7 @@ class receipts_model extends CI_Model{
 	public function get_details($id)
 	//called by receipts/rprint
 {
-	$sql=$this->db->select('series, no, name, address, amount, date, purpose, mode_payment, pmt_details, pan');
+	$sql=$this->db->select('series, sub_series, no, date, name, address, city_pin, pan, amount, purpose, mode_payment, ch_no, tr_date, pmt_details' );
 	$sql=$this->db->from('receipts');
 	$sql=$this->db->where('id',"$id");
 	$sql=$this->db->get();
@@ -17,19 +17,21 @@ class receipts_model extends CI_Model{
 
 
 
-	public function get_max_no()
-	//called by receipts/radd1
+	public function get_max_no($series,$series1)
+	//called by receipts/radd
 	{
 	$sql=$this->db->select_max('no');
-	//$sql=$this->db->from('receipts');
-	$sql=$this->db->get('receipts');
+	$sql=$this->db->from('receipts');
+	$sql=$this->db->where('series', $series);
+	$sql=$this->db->where('sub_series', $series1);
+	$sql=$this->db->get();
 	return $sql->row_array();
 	
 	}
 	
 	
 	public function adddata($data)
-	//called by receipts/radd1
+	//called by receipts/radd
 	{
 	if($this->db->insert('receipts', $data)):
 	return true;

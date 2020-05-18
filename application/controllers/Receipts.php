@@ -22,9 +22,10 @@ class Receipts extends CI_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('receipts')
 		     ->set_subject('Receipt')
-			 ->columns('series', 'no', 'name', 'address', 'amount', 'purpose','mode_payment')
+			 ->columns('series','sub_series', 'no', 'name', 'address', 'amount', 'purpose','mode_payment')
 			 ->display_as('id','Receipt Id')
 			 ->display_as('series','Series')
+			 ->display_as('sub_series','Sub_Series')
 			 ->display_as('no','Receipt No')
 			 ->display_as('name',"Donor's name")
 			 ->display_as('address','Address')
@@ -71,6 +72,11 @@ class Receipts extends CI_Controller{
 
 	public function rprint($id){
 	$det=$this->Receipts_model->get_details($id);
+	if($det['tr_date']==NULL):
+		$det['tr_date']='';
+	else:
+		$det['tr_date']=date('d-m-Y',strtotime($det['tr_date']));
+	endif;
 	$data['det']=$det;
 	$this->load->view('receipts/rprint',$data);
 	$this->load->view('templates/header');
@@ -80,6 +86,8 @@ class Receipts extends CI_Controller{
 
 	public function radd($id=null){
 	$this->form_validation->set_rules('amount', 'Amount', 'greater_than[0]');
+	$this->form_validation->set_rules('mode_payment','Mode of Payment','required');
+	//not submitted
 	if ($this->form_validation->run()==false and empty($_POST)) :
 		$donor=$this->Mlist_model->get_details($id);
 		$purpose1=$this->Daccount_model->list_all();
@@ -93,22 +101,23 @@ class Receipts extends CI_Controller{
 		foreach ($mop1 as $k=>$v):
 			$mop[$v['name']]=$v['name'];
 		endforeach;
-	
-		$data['donor']['name']=$donor['name'];
-		$data['donor']['address']=$donor['add1'].", ".$donor['add2'].", ".$donor['add3'].", ".$donor['add4'].", ".$donor['city'].", ".($donor['pin']=NULL?'':$donor['pin']);
-		$data['donor']['pan']=$donor['pan'];
+		$mop=array(''=>'Select Mode of Payment')+$mop;
 		$data['donor']['id']=$id;
+		$data['donor']['name']=$donor['hon'].' '.$donor['name'];
+		$data['donor']['address']=$donor['add1'].($donor['add2']!==''?', '.$donor['add2']:'').($donor['add3']!==''?', '.$donor['add3']:''). ($donor['add4']!==''?', '.$donor['add4']:'');
+		$data['donor']['city_pin']=($donor['city']==''?'PIN ':$donor['city']).($donor['pin']=NULL?'':': '.$donor['pin']);
+		$data['donor']['pan']=$donor['pan'];
 		$data['amount']='';
 		$data['purpose']=$purpose;
 		$data['mop']=$mop;
-		$data['pmt_details']='';
-		//$data['purpose1']=$purpose1;
-		//$data['mop1']=$mop1;
-		//$data['donor']=$donor;
+		$data['ch_no']='';
+		$data['tr_date']=Date('d-m-Y');
+		$data['pmt_details']='';		
 		$this->load->view('templates/header');
 		$this->load->view('receipts/radd',$data);	
 		$this->load->view('templates/footer');
 	
+	//submitted failed vlidation
 	elseif($this->form_validation->run()==false and !empty($_POST)):
 		//print_r($_POST);
 		//echo "Post not empty";
@@ -118,24 +127,39 @@ class Receipts extends CI_Controller{
 		$this->radd ($id);
 		
 	
+	// submitted OK
 	else:
+		
 		unset($_POST['id']);
-		$rno=$this->Receipts_model->get_max_no();
+		$mop=$_POST['mode_payment'];
+		if ($mop=="Cash"):
+			$series1="Cash";
+		elseif ($mop=="Cheque"):
+			$series1="Cheque";
+		else:
+			$series1="Bank";
+		endif;
+		if ($_POST['tr_date']==''):
+			$_POST['tr_date']=null;
+		endif;
+		$series="Office";
+		$rno=$this->Receipts_model->get_max_no($series, $series1);
 		$rno=++$rno['no'];
-		$_POST['series']='Office';
+		$_POST['series']=$series;
+		$_POST['sub_series']=$series1;
 		$_POST['no']=$rno;
 		$_POST['date']=date("Y-m-d");
+		
 		unset($_POST['submit']);
-		//print_r($_POST);
 		if ($this->Receipts_model->adddata($_POST)):
 			$rid1=$this->Receipts_model->getmaxid();
 			$rid=$rid1['id'];
 			$this->rprint($rid);
 			
-			//echo "<a href=".site_url('login/home').">Go Home</a><br>";
 		else:
 			Die("Something Wrong <a href=".site_url('login/home').">Go Home</a>");
 		endif;
+		
 	
 	endif;
 	

@@ -29,6 +29,7 @@ class Mlist extends CI_Controller{
 			 ->display_as('add2', 'Address2')
 			 ->display_as('city', 'City')
 			 ->unset_clone()
+			 ->required_fields('name','city','dist','state','country')
 			 ->field_type('city','dropdown', $this->city_model->list_all())
 			 ->field_type('state','dropdown', $this->state_model->list_all())
 			 ->field_type('dist','dropdown', $this->district_model->list_all())
@@ -68,9 +69,15 @@ class Mlist extends CI_Controller{
 	public function check_length()
 	{
 	$list=$this->mlist_model->list_all();
-	//echo "<pre>";
-	//print_r($list);
-	//echo "</pre>";
+	$chkname = array();
+	$chkadd1 = array();
+	$chkadd2 = array();
+	$chkadd3 = array();
+	$chkadd4 = array();
+	$chkcity = array();
+	$chkphone1 = array();
+	$chkphone2 = array();
+	
 	foreach ($list as $k=>$v):
 		$lenname=strlen($v['name']);
 		if ($lenname>30):
@@ -111,36 +118,21 @@ class Mlist extends CI_Controller{
 		if ($lenphone2>30):
 			$chkphone2[$v['id']]=$lenphone2;
 		endif;
-				
-		
-		
-	//echo strlen($v['add1'])."<br>";
 	endforeach;
-	echo "<pre>";
-	echo "name";
-	print_r($chkname);
-	echo "add1";
-	print_r($chkadd1);
-	echo "add2";
-	print_r($chkadd2);
-	echo "add3";
-	print_r($chkadd3);
-	echo "add4";
-	print_r($chkadd4);
-	echo "city";
-	print_r($chkcity);
-	echo "phone1";
-	print_r($chkphone1);
-	echo "phone2";
-	print_r($chkphone2);
+	
+	$check=array('name'=>$chkname, 'add1'=>$chkadd1, 'add2'=>$chkadd2, 'add3'=>$chkadd3,'add4'=>$chkadd4, 'city'=>$chkcity, 'phone1'=>$chkphone1, 'phone2'=>$chkphone2);
+	foreach ($check as $k=>$v):
+		echo "<pre>";
+		if (count($v)>0):
+			print_r($k);
+			echo "<br>";
+			print_r($v);
+		else:
+			echo "All ".$k." within range<br>";
+		endif;
+	endforeach;
 	echo "<br><a href=".site_url('login/home').">Go Home</a>";
-	/*
-	echo "phone2";
-	print_r($chkphone2);
-	echo "ref";
-	print_r($chkref);
-	echo "</pre>";
-	*/
+	
 }
 	//not necessary, the option is removed
 	public function list_guest()
