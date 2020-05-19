@@ -14,7 +14,7 @@ class Mlist_model extends CI_Model{
 }
 
 	public function get_details($id)
-	//called by receipts/radd
+	//called by receipts/radd, mlist/_callback_change_color
 	{
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('mlist');

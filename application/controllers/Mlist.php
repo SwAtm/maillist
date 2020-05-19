@@ -14,6 +14,7 @@ class Mlist extends CI_Controller{
 		$this->load->model('district_model');
 		$this->load->model('country_model');
 		$this->load->helper('pdf_helper');
+		$this->load->model('Mlist_model');
 }
 
 	public function list_admin()
@@ -29,6 +30,7 @@ class Mlist extends CI_Controller{
 			 ->display_as('add2', 'Address2')
 			 ->display_as('city', 'City')
 			 ->unset_clone()
+			 ->unset_delete()
 			 ->required_fields('name','city','dist','state','country')
 			 ->field_type('city','dropdown', $this->city_model->list_all())
 			 ->field_type('state','dropdown', $this->state_model->list_all())
@@ -39,8 +41,7 @@ class Mlist extends CI_Controller{
 			 ->field_type('initiated','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('japayajna','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('lang','dropdown', array('K'=>'Kannada', 'E'=>'English'))
-			 //->add_action('receipt',base_url('application/rupee1.png'),'receipts/radd')
-			 //->add_action('receipt',base_url('../web_images/rupee1.png'),'receipts/radd')
+			 ->callback_column('name',array($this,'_callback_change_color'))
 			 ->add_action('receipt',base_url(IMGPATH.'rupee1.png'),'receipts/radd')
 			 ->callback_before_insert(array($this,'toupper'))
 			 ->callback_before_update(array($this,'toupper'));
@@ -65,6 +66,17 @@ class Mlist extends CI_Controller{
 	endforeach;
 	return $post_array;
 	}
+	
+	public function _callback_change_color($value, $row)
+	{
+	$det=$this->Mlist_model->get_details($row->id);
+	if ("Y"==$det['deleted']):
+	return '<span style="color:red">'.$value.'</span>';
+	else:
+	return $value;
+	endif;
+	}
+	
 	
 	public function check_length()
 	{

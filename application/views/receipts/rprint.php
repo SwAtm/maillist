@@ -18,7 +18,11 @@ $pdf->ln(2);
 $pdf->cell(180,0,'',1,1);
 $pdf->ln(5);
 $pdf->SetFont('Arial','B',14);
+if ($det['deleted']=='Y'):
+$pdf->cell(180,5,'RECEIPT-DELETED',0,1,'C');
+else:
 $pdf->cell(180,5,'RECEIPT',0,1,'C');
+endif;
 $pdf->SetFont('Arial','',14);
 $pdf->cell(90,5,'Receipt No: '.$det['series']."-".$det['sub_series']."-".$det['no'],0,0,'L');
 $pdf->cell(90,5,'Date: '.date('d-m-Y',strtotime($det['date'])),0,1,'R');

@@ -85,7 +85,7 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 //custom variables
 //define('SAVEPATH','/volume1/web/receipts/');
-//define('SAVEPATH','/home/freak/');
-define('SAVEPATH','192.168.1.222/volume1/web/web_images');
+define('SAVEPATH','/home/freak/');
+//define('SAVEPATH','192.168.1.222/volume1/web/web_images');
 //define ('IMGPATH','../web_images/');
 define ('IMGPATH', 'application/');

@@ -5,9 +5,9 @@ class receipts_model extends CI_Model{
 		$this->load->database();
 	}
 	public function get_details($id)
-	//called by receipts/rprint
+	//called by receipts/rprint, receipts/rdelete_confirm, receipts/_callback_change_color
 {
-	$sql=$this->db->select('series, sub_series, no, date, name, address, city_pin, pan, amount, purpose, mode_payment, ch_no, tr_date, pmt_details' );
+	$sql=$this->db->select('series, sub_series, no, date, name, address, city_pin, pan, amount, purpose, mode_payment, ch_no, tr_date, pmt_details, deleted' );
 	$sql=$this->db->from('receipts');
 	$sql=$this->db->where('id',"$id");
 	$sql=$this->db->get();
@@ -43,12 +43,21 @@ class receipts_model extends CI_Model{
 
 
 	public function getmaxid()
-	//called by receipts/radd1
+	//called by receipts/radd
 	{
 	$sql=$this->db->select_max('id');
 	$sql=$this->db->get('receipts');
 	return $sql->row_array();
 	}
 	
+	public function rdelete($id)
+	//called by receipts/rdelete
+	{
+	$sql=$this->db->set('deleted','Y');
+	$sql=$this->db->where('id',$id);
+	$sql=$this->db->update('receipts');
+	$done=$this->db->affected_rows();
+	return $done;	
+	}
 }
 ?>
