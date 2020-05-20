@@ -86,6 +86,6 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 //custom variables
 //define('SAVEPATH','/volume1/web/receipts/');
 define('SAVEPATH','/home/freak/');
-//define('SAVEPATH','192.168.1.222/volume1/web/web_images');
+//define('SAVEPATH','//192.168.1.244/home/freak/Public/');
 //define ('IMGPATH','../web_images/');
 define ('IMGPATH', 'application/');

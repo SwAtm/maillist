@@ -2,9 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script src="<?php echo base_url('application/jquery-ui/external/jquery/jquery.js')?>"></script>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url('application/jquery-ui/jquery-ui.css')?>"/>
 <script src="<?php echo base_url('application/jquery-ui/jquery-ui.js')?>"></script>
-
+<link type="text/css" rel="stylesheet" href="<?php echo base_url('application/jquery-ui/jquery-ui.css')?>"/>
 <script type="text/javascript">
 $(document).ready(function() {
         $('input[id$=tr_date]').datepicker({
@@ -41,6 +40,7 @@ $(document).ready(function() {
 
 <?php
 //called by receipts/radd
+
 echo validation_errors();
 echo form_open('receipts/radd',array('id'=>'donation'),$donor);
 echo "<table border=1 align=center>";

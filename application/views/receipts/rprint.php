@@ -68,6 +68,9 @@ $pdf->SetFont('Arial','',10);
 $pdf->Multicell(180,5,$mess,0,'L');
 $filename=SAVEPATH."receipt_".$det['series']."-".$det['sub_series']."-".$det['no'].".pdf";
 $pdf->Output($filename);
+//redirect (site_url('login/home','refresh'));
+//$pdf->close();
+//copy($filename,'http://192.168.1.244/home/freak/Public/receipt.pdf');
 ?>
 
 

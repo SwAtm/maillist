@@ -17,7 +17,7 @@ window.location.href=url
 <select name="selectname" size="1" onChange="pulldown_mlist()">
 <option value="">LIST</option>
 <option value="mlist/list_admin"> View List
-<option value="mlist/check_length"> Check List
+<!--<option value="mlist/check_length"> Check List
 <!--<option value="opd/get_id_edit"> Edit
 <option value="opd/get_id_print"> Print OPD Slip
 <option value="opd/get_date_view"> View A day's Table
