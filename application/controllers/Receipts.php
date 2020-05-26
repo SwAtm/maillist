@@ -15,6 +15,7 @@ class Receipts extends CI_Controller{
 		$this->load->helper('pdf_helper');
 		$this->load->library('Ntw');
 		$this->load->helper('form');
+		
 }
 
 	public function rlist()
@@ -72,6 +73,7 @@ class Receipts extends CI_Controller{
 
 	public function rprint($id){
 	$det=$this->Receipts_model->get_details($id);
+	$det['id']=$id;
 	if ($det['deleted']=='Y'):
 	$data['noprint']=$det;
 	$this->load->view('templates/header');
@@ -85,8 +87,8 @@ class Receipts extends CI_Controller{
 		endif;
 	$data['det']=$det;
 	$this->load->view('receipts/rprint',$data);
-	$this->load->view('templates/header');
-	$this->output->append_output("Receipt saved at ".SAVEPATH."<a href=".site_url('login/home')."> Go Home</a>");
+	//$this->load->view('templates/header');
+	//$this->output->append_output("Receipt saved at ".SAVEPATH."<a href=".site_url('login/home')."> Go Home</a>");
 	//redirect ('login/home');
 	endif;
 	}
@@ -112,8 +114,9 @@ class Receipts extends CI_Controller{
 		$data['donor']['id']=$id;
 		$data['donor']['name']=$donor['hon'].' '.$donor['name'];
 		$data['donor']['address']=$donor['add1'].($donor['add2']!==''?', '.$donor['add2']:'').($donor['add3']!==''?', '.$donor['add3']:''). ($donor['add4']!==''?', '.$donor['add4']:'');
-		$data['donor']['city_pin']=($donor['city']==''?'PIN ':$donor['city']).($donor['pin']=NULL?'':': '.$donor['pin']);
+		$data['donor']['city_pin']=($donor['city']).($donor['pin']=NULL?'':' - '.$donor['pin']);
 		$data['donor']['pan']=$donor['pan'];
+		$data['donor']['phone']=$donor['phone1'];
 		$data['amount']='';
 		$data['purpose']=$purpose;
 		$data['mop']=$mop;
@@ -209,6 +212,27 @@ class Receipts extends CI_Controller{
 	$this->load->view('templates/footer');	
 	
 	}
-
+	
+	public function letter($id=null)
+	{
+	$det=$this->Receipts_model->get_details($id);	
+	if($det['tr_date']==NULL):
+		$det['tr_date']='';
+	else:
+		$det['tr_date']=date('d-m-Y',strtotime($det['tr_date']));
+	endif;
+	$data['det']=$det;
+	$this->load->view('templates/header');
+	$this->load->view('receipts/letter',$data);
+	$this->load->view('templates/footer');
+	
+	echo "<a href=".site_url('login/home').">Home</a>";
+	}
+	
+	public function letter_print()
+	{
+	$data['det']=$_POST;
+	$this->load->view('receipts/letter_print',$data);
+	}
 }
 ?>

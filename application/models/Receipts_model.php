@@ -5,9 +5,9 @@ class receipts_model extends CI_Model{
 		$this->load->database();
 	}
 	public function get_details($id)
-	//called by receipts/rprint, receipts/rdelete_confirm, receipts/_callback_change_color
+	//called by receipts/rprint, receipts/rdelete_confirm, receipts/_callback_change_color, receipts/letter
 {
-	$sql=$this->db->select('series, sub_series, no, date, name, address, city_pin, pan, amount, purpose, mode_payment, ch_no, tr_date, pmt_details, deleted' );
+	$sql=$this->db->select('series, sub_series, no, date, name, address, city_pin, phone, pan, amount, purpose, mode_payment, ch_no, tr_date, pmt_details, deleted' );
 	$sql=$this->db->from('receipts');
 	$sql=$this->db->where('id',"$id");
 	$sql=$this->db->get();
