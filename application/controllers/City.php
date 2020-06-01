@@ -7,6 +7,8 @@ class City extends CI_Controller{
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
 		$this->load->library('session');
+		$this->load->model('City_model');
+		$this->load->model('Mlist_model');
 
 }
 
@@ -17,12 +19,14 @@ class City extends CI_Controller{
 		     ->set_subject('City')
 			 ->columns('id', 'name')
 			 ->display_as('id','City Id')
-			->display_as('name','City Name')
-			->set_rules('name', 'City Name', 'required|is_unique[city.name]')
-			->callback_before_insert(array($this,'toupper'))
-			->callback_before_update(array($this,'toupper'));
-			$output = $crud->render();
-			$this->_example_output($output);                
+			 ->display_as('name','City Name')
+			 ->set_rules('name', 'City Name', 'required|is_unique[city.name]')
+			 ->callback_before_insert(array($this,'toupper'))
+			 ->callback_before_update(array($this,'toupper'))
+			 ->set_lang_string('delete_error_message','This data cannot be deleted, it is used in Maillist')
+             ->callback_before_delete(array($this,'delete_check'));
+		$output = $crud->render();
+		$this->_example_output($output);                
 	}
 
 
@@ -42,6 +46,21 @@ class City extends CI_Controller{
 	return $post_array;
 	}
 
+
+	public function delete_check($primary_key)
+	{
+	//return false;
+	$city = $this->City_model->get_details($primary_key);
+	if ($this->Mlist_model->used_or_not($city)):	
+		//echo $city;
+		return false;
+	else:
+		//echo $city;
+		return true;
+	endif;
+	
+	
+	}
 
 }
 

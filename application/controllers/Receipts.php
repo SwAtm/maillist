@@ -234,5 +234,29 @@ class Receipts extends CI_Controller{
 	$data['det']=$_POST;
 	$this->load->view('receipts/letter_print',$data);
 	}
+
+	public function daily_cash_report($date=null)
+	{
+	$this->form_validation->set_rules('date','Date','required');	
+	//unsubmitted or failed
+	if ($this->form_validation->run()==false):
+		$this->load->view('templates/header');
+		$this->load->view('receipts/get_date');
+		$this->load->view('templates/footer');
+	else:
+	//submitted OK
+		$date=$_POST['date'];
+		$this->load->view('templates/header');
+		$this->output->append_output("<br>Total Cash Receitps for ".date('d-m-Y',strtotime($date))."<br><br>");
+		if ($daydet=$this->Receipts_model->get_day_details($date)):
+			$this->output->append_output("Receipt No. from: ".$daydet->minno." To: ".$daydet->maxno." = Rs. ".$daydet->amt."<br><br>");
+		else:
+			$this->output->append_output("No receipts");
+		endif;
+		$this->load->view('templates/footer');
+	endif;
+	
+	}
+
 }
 ?>

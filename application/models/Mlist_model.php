@@ -113,7 +113,20 @@ class Mlist_model extends CI_Model{
 		return $sql->result_array();
 	}
 
-	
+		public function used_or_not($city)
+		//called by city/delete_check
+		{
+		$sql=$this->db->select ('name');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('city',$city);
+		$sql=$this->db->get();
+		//$result= $sql->result();
+		if ($sql && $sql->num_rows()>0):
+		return true;
+		else:
+		return false;
+		endif;	
+		}
 }
 ?>
 	
