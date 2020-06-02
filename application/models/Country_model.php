@@ -17,6 +17,17 @@ class Country_model extends CI_Model{
 	$result2=array_combine($result1,$result1);
 	return $result2;
 }
+
+	public function get_details($id)
+	//called by country/delete_check
+	{
+	$sql=$this->db->select('name');
+	$sql=$this->db->from('country');
+	$sql=$this->db->where('id',$id);
+	$sql=$this->db->get();
+	$result= $sql->row();
+	return $result->name;
+	}
 }
 ?>
 	

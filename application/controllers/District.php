@@ -7,6 +7,8 @@ class District extends CI_Controller{
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
 		$this->load->library('session');
+		$this->load->model('District_model');
+		$this->load->model('Mlist_model');	
 }
 
 	public function mdistrict()
@@ -19,7 +21,9 @@ class District extends CI_Controller{
 			->display_as('name','District Name')
 			->set_rules('name', 'District Name', 'required|is_unique[district.name]')
 			->callback_before_insert(array($this,'toupper'))
-			->callback_before_update(array($this,'toupper'));
+			->callback_before_update(array($this,'toupper'))
+			->set_lang_string('delete_error_message','This data cannot be deleted, it is used in Maillist')
+            ->callback_before_delete(array($this,'delete_check'));
 			$output = $crud->render();
 			$this->_example_output($output);                
 	}
@@ -41,6 +45,20 @@ class District extends CI_Controller{
 	return $post_array;
 	}
 
+	public function delete_check($primary_key)
+	{
+	//return false;
+	$dist = $this->District_model->get_details($primary_key);
+	if ($this->Mlist_model->used_or_not_d($dist)):	
+		
+		return false;
+	else:
+		
+		return true;
+	endif;
+	
+	
+	}
 
 }
 

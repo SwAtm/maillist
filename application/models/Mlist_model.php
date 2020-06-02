@@ -127,6 +127,56 @@ class Mlist_model extends CI_Model{
 		return false;
 		endif;	
 		}
+
+		public function used_or_not_d($dist)
+		//called by district/delete_check
+		{
+		$sql=$this->db->select ('name');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('dist',$dist);
+		$sql=$this->db->get();
+		//$result= $sql->result();
+		if ($sql && $sql->num_rows()>0):
+		return true;
+		else:
+		return false;
+		endif;	
+		}
+		
+		
+		public function used_or_not_s($state)
+		//called by state/delete_check
+		{
+		$sql=$this->db->select ('name');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('state',$state);
+		$sql=$this->db->get();
+		//$result= $sql->result();
+		if ($sql && $sql->num_rows()>0):
+		return true;
+		else:
+		return false;
+		endif;	
+		}
+		
+		public function used_or_not_c($country)
+		//called by country/delete_check
+		{
+		$sql=$this->db->select ('name');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('country',$country);
+		$sql=$this->db->get();
+		//$result= $sql->result();
+		if ($sql && $sql->num_rows()>0):
+		return true;
+		else:
+		return false;
+		endif;	
+		}
+		
+		
 }
+
+
 ?>
 	

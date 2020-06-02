@@ -17,6 +17,20 @@ class State_model extends CI_Model{
 	$result2=array_combine($result1,$result1);
 	return $result2;
 }
+
+	public function get_details($id)
+	//called by state/delete_check
+	{
+	$sql=$this->db->select('name');
+	$sql=$this->db->from('state');
+	$sql=$this->db->where('id',$id);
+	$sql=$this->db->get();
+	$result= $sql->row();
+	return $result->name;
+	}
+
+
+
 }
 ?>
 	
