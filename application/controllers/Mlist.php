@@ -62,7 +62,8 @@ class Mlist extends CI_Controller{
 	public function toupper($post_array)
 	{
 	foreach ($post_array as $k=>$v):
-	$post_array[$k]=strtoupper($v);
+	$post_array[$k]=strtoupper($post_array[$k]);
+	$post_array[$k]=str_replace(",", '', $post_array[$k]);
 	endforeach;
 	return $post_array;
 	}
