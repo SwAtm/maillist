@@ -98,6 +98,7 @@ window.location.href=url
 <option value="misc/mlistcsv">Maillist CSV
 <option value="misc/backup">Take a backup
 <option value="receipts/daily_cash_report">Daily Cash Report
+<option value="receipts/monthly_report">Monthly Report	
 </select>
 </form>
 

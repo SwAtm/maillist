@@ -258,5 +258,42 @@ class Receipts extends CI_Controller{
 	
 	}
 
+	public function monthly_report()
+	{
+		$this->form_validation->set_rules('stdt','Starting Date','required');	
+		$this->form_validation->set_rules('endt','Ending Date','required');	
+
+		//unsubmitted/failed
+		if ($this->form_validation->run()==false):
+			$this->load->view('templates/header');
+			$this->load->view('receipts/mreport_get_dates');
+			$this->load->view('templates/footer');
+		//OK	
+		else:
+			$stdt=$_POST['stdt'];
+			$endt=$_POST['endt'];
+			$mop1=$this->Pmode_model->list_all();
+			$data['stdt']=$stdt;
+			$data['endt']=$endt;
+			foreach ($mop1 as $k=>$v):
+			$mop[$v['name']]=$v['name'];
+			endforeach;
+			//$data['mop']=$mop;
+			//$this->load->view('receipts/mreport',$data);
+			
+			foreach ($mop as $value) {
+						$mreport[$value]['det']	= $this->Receipts_model->mreport($stdt, $endt, $value);
+						$mreport[$value]['total']=$this->Receipts_model->mtotal($stdt, $endt, $value);
+						}	
+			//endforeach;				
+
+			$data['stdt']=$stdt;
+			$data['endt']=$endt;
+			$data['report']=$mreport;
+			$this->load->view('receipts/mreport',$data);
+			
+		endif;
+	}
+
 }
 ?>

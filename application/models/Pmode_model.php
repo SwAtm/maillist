@@ -5,7 +5,7 @@ class Pmode_model extends CI_Model{
 		$this->load->database();
 	}
 	public function list_all()
-	//called by receipts/radd
+	//called by receipts/radd, receipts/monthly_report
 {
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('pmode');
