@@ -14,7 +14,7 @@ $(document).ready(function() {
         });
         
         document.forms['donation'].elements['amt'].focus();
-
+        document.forms['donation'].elements['amt'].select();
 
 		$("#mop").change(function() {
 			if ($(this).val() == "Cash") {

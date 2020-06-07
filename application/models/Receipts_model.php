@@ -84,6 +84,7 @@ class receipts_model extends CI_Model{
 		$sql=$this->db->where('date>=', $stdt);
 		$sql=$this->db->where('date<=', $endt);
 		$sql=$this->db->where('mode_payment', $mop);
+		$sql=$this->db->where('deleted', 'N');
 		$sql=$this->db->get('receipts');
 		$result=$sql->result_array();
 		return $result;
@@ -97,6 +98,7 @@ class receipts_model extends CI_Model{
 		$sql=$this->db->where('date>=', $stdt);
 		$sql=$this->db->where('date<=', $endt);
 		$sql=$this->db->where('mode_payment', $mop);
+		$sql=$this->db->where('deleted', 'N');
 		$sql=$this->db->get('receipts');
 		$result=$sql->row_array();
 		$result=$result['amount'];
