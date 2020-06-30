@@ -23,7 +23,7 @@ div {
 <body>
 <?php
 echo "<table width=100%  bgcolor=lightblue cellpadding=5>";
-echo "<tr><td align=middle><b>Ramakrishha Mission Ashrama, Belgaum</b></td></tr>";
+echo "<tr><td align=middle><b>Ramakrishna Mission Ashrama, Belgaum</b></td></tr>";
 echo "<tr><td align=middle>".date('l jS \of F Y h:i:s A')."</td></tr>";
 echo "<tr><td>";
 if (null!==$this->session->logged AND $this->session->logged=='admin'):

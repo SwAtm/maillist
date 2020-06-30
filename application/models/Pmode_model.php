@@ -13,6 +13,17 @@ class Pmode_model extends CI_Model{
 	return $sql->result_array();
 }
 
+	public function get_sub_series($mop)
+	//called by receipts/radd
+	{
+	$sql=$this->db->select('sub_series');
+	$sql=$this->db->from('pmode');
+	$sql=$this->db->where('name',$mop);
+	$sql=$this->db->get();
+	return $sql->row();
+	
+	}
+
 
 }
 ?>

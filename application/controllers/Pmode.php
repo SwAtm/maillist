@@ -7,17 +7,20 @@ class Pmode extends CI_Controller{
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
 		$this->load->library('session');
-}
+		}
 
 	public function mpmode()
 	{
 		$crud = new grocery_CRUD();
 		$crud->set_table('pmode')
 		     ->set_subject('Payment Mode')
-			 ->columns('id', 'name')
+			 ->columns('id', 'name', 'sub_series')
 			 ->display_as('id','Payment Mode Id')
 			->display_as('name','Payment Mode Name')
-			->set_rules('name', 'Payment Mode Name', 'required|is_unique[pmode.name]')
+			->display_as('sub_series','Sub Series')
+			//->set_rules('name', 'Payment Mode Name', 'required|is_unique[pmode.name]')
+			->set_rules('name', 'Payment Mode Name', 'required|callback_pmode_check')
+			->set_rules('sub_series', 'Sub Series', 'required')
 			->callback_before_insert(array($this,'toupper'))
 			->callback_before_update(array($this,'toupper'));
 			$output = $crud->render();
@@ -36,11 +39,53 @@ class Pmode extends CI_Controller{
 	public function toupper($post_array)
 	{
 	foreach ($post_array as $k=>$v):
+	if ($k=='name'):
 	$post_array[$k]=ucwords($v);
+	else:
+	$post_array[$k]=strtoupper($v);
+	endif;
 	endforeach;
 	return $post_array;
 	}
 
+	public function pmode_check($str)
+	{
+	$id = $this->uri->segment(4);
+	
+	$sql=$this->db->select('*');
+	$sql=$this->db->from('pmode');
+	$sql=$this->db->where('name',$str);
+	
+	if (!empty($id) && is_numeric($id)):
+		$sql=$this->db->where('id !=',$id);
+	endif;
+	
+	$res=$this->db->get();
+	if ($res and $res->num_rows()>0):
+		$this->form_validation->set_message('pmode_check','There is already an entry for same Payment Mode');
+		return false;
+    else:
+		return true;
+	endif;
 
+  
+/*	$num_row = $this->db->where('name',$str)->get('pmode')->num_rows();
+	if ($num_row >= 1)
+		{
+		$this->form_validation->set_message('name', 'The Payment Mode already exists');
+		return FALSE;
+		}
+	else
+		{
+		return TRUE;
+		}
+*/
+
+}
+	
+	
+	
+	
+	
 }
 

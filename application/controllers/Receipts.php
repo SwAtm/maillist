@@ -110,6 +110,10 @@ class Receipts extends CI_Controller{
 		foreach ($mop1 as $k=>$v):
 			$mop[$v['name']]=$v['name'];
 		endforeach;
+		/*make sub_series as index of the array. This will be posted and can be used to add to db
+		foreach ($mop1 as $k=>$v):
+			$mop[$v['sub_series']]=$v['name'];
+		endforeach;*/
 		$mop=array(''=>'Select Mode of Payment')+$mop;
 		$data['donor']['id']=$id;
 		$data['donor']['name']=$donor['hon'].' '.$donor['name'];
@@ -141,17 +145,24 @@ class Receipts extends CI_Controller{
 	else:
 		
 		unset($_POST['id']);
+		
 		$mop=$_POST['mode_payment'];
-		if ($mop=="Cash"):
+		$series1=$this->Pmode_model->get_sub_series($mop)->sub_series;
+				
+		/*if ($mop=="Cash"):
 			$series1="Cash";
 		elseif ($mop=="Cheque"):
 			$series1="Cheque";
 		else:
 			$series1="Bank";
 		endif;
+		*/
+		
+		
 		if ($_POST['tr_date']==''):
 			$_POST['tr_date']=null;
 		endif;
+		//$series1=$_POST['mode_payment'];
 		$series="Office";
 		$rno=$this->Receipts_model->get_max_no($series, $series1);
 		$rno=++$rno['no'];

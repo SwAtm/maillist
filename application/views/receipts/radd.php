@@ -18,6 +18,7 @@ $(document).ready(function() {
 
 		$("#mop").change(function() {
 			if ($(this).val() == "Cash") {
+			//if ($("option:selected", this).text() == "Cash") {
 				$('#ch_notohide').hide();
 				$('#tr_dttohide').hide();
 			} else if ($(this).val()=="Cheque") {
