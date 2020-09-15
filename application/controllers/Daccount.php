@@ -19,7 +19,8 @@ class Daccount extends CI_Controller{
 			->display_as('name','Donation Account Name')
 			->set_rules('name', 'Donation Account Name', 'required|is_unique[daccount.name]')
 			->callback_before_insert(array($this,'toupper'))
-			->callback_before_update(array($this,'toupper'));
+			->callback_before_update(array($this,'toupper'))
+			->callback_column('name', array($this, '_callback_width' ));
 			$output = $crud->render();
 			$this->_example_output($output);                
 	}
@@ -41,6 +42,10 @@ class Daccount extends CI_Controller{
 	return $post_array;
 	}
 
+	public function _callback_width($value, $row){
+
+		return $value = wordwrap($row->name,50,"/n", true);
+	}
 
 }
 
