@@ -104,5 +104,20 @@ class receipts_model extends CI_Model{
 		$result=$result['amount'];
 		return $result;
 	}
+
+	public function rreport($stdt, $endt)
+	//called by receipts/receipt_report
+	{
+		$sql=$this->db->select('*');
+		$sql=$this->db->where('date>=', $stdt);
+		$sql=$this->db->where('date<=', $endt);
+		$sql=$this->db->where('deleted', 'N');
+		$sql=$this->db->get('receipts');
+		$result=$sql->result_array();
+		return $result;
+
+	}
+
+
 }
 ?>

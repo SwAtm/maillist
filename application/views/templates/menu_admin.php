@@ -99,6 +99,7 @@ window.location.href=url
 <option value="misc/backup">Take a backup
 <option value="receipts/daily_cash_report">Daily Cash Report
 <option value="receipts/monthly_report">Monthly Report	
+<option value="receipts/receipt_report">Receipts' Report	
 </select>
 </form>
 

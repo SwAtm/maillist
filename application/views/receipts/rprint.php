@@ -57,8 +57,9 @@ $pdf->cell(78,5,'Collected By',0,0,'L');
 $pdf->cell(27,5,'Secretary',0,1,'L');
 $pdf->ln(1);
 $pdf->cell(180,0,'',1,1);
-if ($det['amount']>2000 AND $det['mode_payment']=="Cash"):
-$mess="";
+//if ($det['amount']>2000 AND $det['mode_payment']=="Cash"):
+if ($det['pan']=='' OR $det['mode_payment']=="Cash"):
+$mess="Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
 else:
 $mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide order no DIT(E)/848/8E/109/69-70, dated 12-01-2009 which has been further extended in perpetuity by letter no DIT(E)/109/69-70 dated 26-09-2011. Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
 endif;

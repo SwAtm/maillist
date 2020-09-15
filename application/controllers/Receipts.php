@@ -306,5 +306,55 @@ class Receipts extends CI_Controller{
 		endif;
 	}
 
+	public function receipt_report()
+	{
+
+		$this->form_validation->set_rules('stdt','Starting Date','required');	
+		$this->form_validation->set_rules('endt','Ending Date','required');	
+
+		//unsubmitted/failed
+		if ($this->form_validation->run()==false):
+			$this->load->view('templates/header');
+			$this->load->view('receipts/rreport_get_dates');
+			$this->load->view('templates/footer');
+		//OK	
+		else:
+			$stdt=$_POST['stdt'];
+			$endt=$_POST['endt'];
+			$rhead = array ('Sl No.', 'Name of the Donor', 'Full Postal Address of the Donor', 'Amount in Rs.', 'PAN', 'Aadhar No', 'Purpose', 'Mode of Receipt', 'Donation Receipt Category', 'Receipt No.', 'Receipt Date', 'Center\'s Remarks');
+			$rreport = $this->Receipts_model->rreport($stdt, $endt);
+			$filename = 'Receipts_'.date('d-m-Y',strtotime($stdt)).' - '.date('d-m-Y',strtotime($endt));
+			$fp = fopen(SAVEPATH.$filename, 'w');
+			fputcsv($fp, array_values($rhead)); 
+			$i=1;
+			foreach ($rreport as $key=>$value):
+			$data['sl_no']	= $i;
+			$data['name'] = $value['name'];
+			$data['address'] = $value['address'].' '.$value['city_pin'];
+			$data['amount'] = $value['amount'];
+			$data['pan'] = $value['pan'];
+			$data['adhar'] = '';
+			$data['purpose'] = $value['purpose'];
+			$data['mode'] = $value['mode_payment'];
+			//if($value['amount']>2000 and $value['mode_payment']=='Cash'):
+			if ($value['pan']=='' OR $value['mode_payment']=="Cash"):
+				$data['r_cat'] = 'Other';
+			else:
+				$data['r_cat'] = '80 G';
+			endif;
+			$data['r_number'] = $value['series'].'-'.$value['sub_series'].'-'.$value['no'];
+			$data['date'] = $value['date'];
+			$data['remarks'] = '';
+			fputcsv($fp, $data);
+			$i++;
+			endforeach;
+			fclose($fp);
+			unset ($i);
+			$this->load->view('templates/header');
+			$this->output->append_output("File ".$filename. " Saved at ".SAVEPATH);
+			$this->load->view('templates/footer');
+		endif;
+	}
+
 }
 ?>

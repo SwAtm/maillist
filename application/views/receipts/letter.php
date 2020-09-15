@@ -37,7 +37,10 @@ echo "<tr><td>".form_input(array('id'=>'name','name'=>'name1','value'=>"Dear ".u
 
 echo "<tr><td>".form_input(array('name'=>'greetings','value'=>"Namaskars.",'size'=>'50','maxlength'=>'50'))."</td></tr>";
 
-echo "<tr><td>".form_textarea(array('name'=>'message','value'=>"Please find enclosed receipt for your kind donation of Rs. ".$amt." (Rs. ".$ntw->numToWord($det['amount'])." Only)"." through ".$det['mode_payment'].($det['ch_no']==''?'':" No: ".$det['ch_no']).($det['tr_date']==''?'':" Dt: ".$det['tr_date'])." towards ".$det['purpose'].".",'size'=>'200','maxlength'=>'200','rows'=>'3','cols'=>'60'))."</td></tr>";
+//echo "<tr><td>".form_textarea(array('name'=>'message','value'=>"Please find enclosed receipt for your kind donation of Rs. ".$amt." (Rs. ".$ntw->numToWord($det['amount'])." Only)"." through ".$det['mode_payment'].($det['ch_no']==''?'':" No: ".$det['ch_no']).($det['tr_date']==''?'':" Dt: ".$det['tr_date'])." towards ".$det['purpose'].".",'size'=>'200','maxlength'=>'200','rows'=>'3','cols'=>'60'))."</td></tr>";
+
+echo "<tr><td>".form_textarea(array('name'=>'message','value'=>"Please find enclosed receipt for your kind donation of Rs. ".$amt." (Rs. ".$ntw->numToWord($det['amount'])." Only)"." through ".(strstr($det['mode_payment'], 'Bank')?"Bank Transfer":$det['mode_payment']).($det['ch_no']==''?'':" No: ".$det['ch_no']).($det['tr_date']==''?'':" Dt: ".$det['tr_date'])." towards ".$det['purpose'].".",'size'=>'200','maxlength'=>'200','rows'=>'3','cols'=>'60'))."</td></tr>";
+
 
 echo "<tr><td>".form_textarea(array('name'=>'message1','value'=>"Many thanks for your kind support. The activities of the Ashrama are going on well.",'size'=>'250','maxlength'=>'250','rows'=>'3','cols'=>'60'))."</td></tr>";
 
