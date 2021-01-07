@@ -221,6 +221,25 @@ class Mlist extends CI_Controller{
 			
 		}	
 	
+		public function labels_kar_wo_blore_bgm()
+		{
+		$data['addresses']=$this->mlist_model->getkar_wo_blore_bgm();
+		$data['place']='Karnataka without Blore and Belgaum';
+		$this->load->view('mlist/lables',$data);
+		$this->load->view('templates/header');
+		$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");	
+			
+		}	
+
+		public function labels_ind_wo_karnataka()
+		{
+		$data['addresses']=$this->mlist_model->getind_wo_karnataka();
+		$data['place']='India without Karnataka';
+		$this->load->view('mlist/lables',$data);
+		$this->load->view('templates/header');
+		$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");	
+			
+		}	
 
 
 }
