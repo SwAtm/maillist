@@ -321,27 +321,32 @@ class Receipts extends CI_Controller{
 		else:
 			$stdt=$_POST['stdt'];
 			$endt=$_POST['endt'];
-			$rhead = array ('Sl No.', 'Name of the Donor', 'Full Postal Address of the Donor', 'Amount in Rs.', 'PAN', 'Aadhar No', 'Purpose', 'Mode of Receipt', 'Donation Receipt Category', 'Receipt No.', 'Receipt Date', 'Center\'s Remarks');
+			$rhead = array ('Sl No.', 'PAN', 'Id_code', 'Section Code', 'Name', 'Address', 'Contact No', 'Donation Type', 'Mode of Receipt', 'Amount', 'Receipt No.', 'Receipt Date', 'Remarks');
 			$rreport = $this->Receipts_model->rreport($stdt, $endt);
 			$filename = 'Receipts_'.date('d-m-Y',strtotime($stdt)).' - '.date('d-m-Y',strtotime($endt));
 			$fp = fopen(SAVEPATH.$filename, 'w');
 			fputcsv($fp, array_values($rhead)); 
 			$i=1;
 			foreach ($rreport as $key=>$value):
+			//Pan,  id code, section code, name, address, contact no, donation type, mode of receipt, amount
 			$data['sl_no']	= $i;
+			$data['pan'] = $value['pan'];
+			if ($value['pan']==''): 
+				$data['id_code'] = '';
+			else:
+				$data['id_code'] = '1';	
+			endif;
+			if ($value['pan']=='' OR $value['mode_payment']=="Cash"):
+				$data['section_code'] = 'NA';
+			else:
+				$data['section_code'] = '80G';
+			endif;
 			$data['name'] = $value['name'];
 			$data['address'] = $value['address'].' '.$value['city_pin'];
+			$data['contact_no'] = $value['phone'];
+			$data['donation_type'] = $value['purpose'];
+			$data['mode_of_receipt'] = $value['mode_payment'];
 			$data['amount'] = $value['amount'];
-			$data['pan'] = $value['pan'];
-			$data['adhar'] = '';
-			$data['purpose'] = $value['purpose'];
-			$data['mode'] = $value['mode_payment'];
-			//if($value['amount']>2000 and $value['mode_payment']=='Cash'):
-			if ($value['pan']=='' OR $value['mode_payment']=="Cash"):
-				$data['r_cat'] = 'Other';
-			else:
-				$data['r_cat'] = '80 G';
-			endif;
 			$data['r_number'] = $value['series'].'-'.$value['sub_series'].'-'.$value['no'];
 			$data['date'] = $value['date'];
 			$data['remarks'] = '';
