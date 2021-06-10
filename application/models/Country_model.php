@@ -28,6 +28,20 @@ class Country_model extends CI_Model{
 	$result= $sql->row();
 	return $result->name;
 	}
+
+	public function findname($str){
+	$sql=$this->db->select('*');
+	$sql=$this->db->from('country');
+	$sql=$this->db->where('name',$str);
+	$num=$sql->count_all_results();
+	if ($num and $num>0):
+	return true;
+	else:
+	return false;
+	endif;
+	
+	}
+
 }
 ?>
 	

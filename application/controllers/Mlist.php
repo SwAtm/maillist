@@ -6,7 +6,7 @@ class Mlist extends CI_Controller{
 		$this->load->database();
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
-		//$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(TRUE);
 		$this->load->library('session');
 		$this->load->model('mlist_model');
 		$this->load->model('city_model');
@@ -15,6 +15,7 @@ class Mlist extends CI_Controller{
 		$this->load->model('country_model');
 		$this->load->helper('pdf_helper');
 		$this->load->model('Mlist_model');
+		$this->load->model('id_type_model');
 }
 
 	public function list_admin()
@@ -32,11 +33,13 @@ class Mlist extends CI_Controller{
 			 ->display_as('phone1', 'Phone')
 			 ->unset_clone()
 			 ->unset_delete()
-			 ->required_fields('name','city','dist','state','country')
+			 ->required_fields('name','city','dist','state','country','id_name')
 			 ->field_type('city','dropdown', $this->city_model->list_all())
 			 ->field_type('state','dropdown', $this->state_model->list_all())
 			 ->field_type('dist','dropdown', $this->district_model->list_all())
 			 ->field_type('country','dropdown', $this->country_model->list_all())
+			 ->field_type('id_name','dropdown', $this->id_type_model->list_all())
+			 ->field_type('id_code', 'invisible')		
 			 ->field_type('deleted','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('send','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('initiated','dropdown', array('Y'=>'Yes', 'N'=>'No'))
@@ -46,7 +49,30 @@ class Mlist extends CI_Controller{
 			 ->add_action('receipt',base_url(IMGPATH.'rupee1.png'),'receipts/radd')
 			 ->callback_before_insert(array($this,'toupper'))
 			 ->callback_before_update(array($this,'toupper'));
-			$output = $crud->render();
+			 //if id name is 'not available', id number should not be required, else it should be required.
+			 $id_no_req = $this->input->post('id_name')=='NOT AVAILABLE'?'':'|required';
+			 $crud->set_rules('id_name', 'ID Name', 'trim');
+			 $crud->set_rules('id_no', 'ID Number', 'trim'.$id_no_req);
+			 $crud->set_rules('city', 'City', 'callback_checkcity', array('checkcity'=>'Country is India and city is name of a country'));
+			
+			
+			// Get state
+	       $state = $crud->getState(); 
+
+
+           // Call render function
+               $output = $crud->render();
+
+			
+               if($state == 'add')
+	       {
+		$js='<script>$(\'select[name="country"] option[value="INDIA"]\').attr("selected", "selected");</script>';
+		$js.='<script>$(\'select[name="id_name"] option[value="PAN"]\').attr("selected", "selected");</script>';
+		$output->output .= $js;	
+	       }
+			
+			
+			//$output = $crud->render();
 			$this->_example_output($output);                
 			
 	}
@@ -66,6 +92,7 @@ class Mlist extends CI_Controller{
 	$post_array[$k]=strtoupper($post_array[$k]);
 	$post_array[$k]=str_replace(",", '', $post_array[$k]);
 	endforeach;
+	$post_array['id_code']=$this->id_type_model->get_code_from_name($post_array['id_name']);
 	return $post_array;
 	}
 	
@@ -79,7 +106,24 @@ class Mlist extends CI_Controller{
 	endif;
 	}
 	
+	public function checkcity($str){
 	
+	if ($this->input->post('country')=='INDIA'):
+		if ($this->country_model->findname($str)):
+		return false;
+		else:
+		return true;
+		endif;
+	else:
+		return true;
+	endif;	
+	
+	
+	
+	
+	
+	
+	}
 	public function check_length()
 	{
 	$list=$this->mlist_model->list_all();

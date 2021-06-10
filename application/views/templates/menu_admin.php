@@ -77,6 +77,7 @@ window.location.href=url
 <option value="daccount/mdaccount">Donation Accounts
 <option value="pmode/mpmode">Mode of Payment
 <option value="receipts/rlist">Receipts
+<option value="idtype/midtype">IDs and Codes
 </select>
 </form>
 <?php
