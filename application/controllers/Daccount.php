@@ -17,7 +17,7 @@ class Daccount extends CI_Controller{
 			 ->columns('id', 'name')
 			 ->display_as('id','Donation Account Id')
 			->display_as('name','Donation Account Name')
-			->set_rules('name', 'Donation Account Name', 'required|is_unique[daccount.name]')
+			->set_rules('name', 'Donation Account Name', 'required|callback_isunique')
 			->callback_before_insert(array($this,'toupper'))
 			->callback_before_update(array($this,'toupper'))
 			->callback_column('name', array($this, '_callback_width' ));
@@ -46,6 +46,30 @@ class Daccount extends CI_Controller{
 
 		return $value = wordwrap($row->name,50,"/n", true);
 	}
+
+	public function isunique($str){
+		
+	$id = $this->uri->segment(4);
+	
+	$sql=$this->db->select('*');
+	$sql=$this->db->from('daccount');
+	$sql=$this->db->where('name',$str);
+	
+	if (!empty($id) && is_numeric($id)):
+		$sql=$this->db->where('id !=',$id);
+	endif;
+	
+	$res=$this->db->get();
+	if ($res and $res->num_rows()>0):
+		$this->form_validation->set_message('isunique','There is already an entry for same Account Name');
+		return false;
+    else:
+		return true;
+	endif;
+
+		
+		}
+	
 
 }
 

@@ -20,7 +20,7 @@ class City extends CI_Controller{
 			 ->columns('id', 'name')
 			 ->display_as('id','City Id')
 			 ->display_as('name','City Name')
-			 ->set_rules('name', 'City Name', 'required|is_unique[city.name]')
+			 ->set_rules('name', 'City Name', 'required|callback_isunique')
 			 ->callback_before_insert(array($this,'toupper'))
 			 ->callback_before_update(array($this,'toupper'))
 			 ->set_lang_string('delete_error_message','This data cannot be deleted, it is used in Maillist')
@@ -41,7 +41,7 @@ class City extends CI_Controller{
 	public function toupper($post_array)
 	{
 	foreach ($post_array as $k=>$v):
-	$post_array[$k]=ucwords($v);
+	$post_array[$k]=strtoupper($v);
 	endforeach;
 	return $post_array;
 	}
@@ -61,6 +61,32 @@ class City extends CI_Controller{
 	
 	
 	}
+
+	public function isunique($str){
+		
+	$id = $this->uri->segment(4);
+	
+	$sql=$this->db->select('*');
+	$sql=$this->db->from('city');
+	$sql=$this->db->where('name',$str);
+	
+	if (!empty($id) && is_numeric($id)):
+		$sql=$this->db->where('id !=',$id);
+	endif;
+	
+	$res=$this->db->get();
+	if ($res and $res->num_rows()>0):
+		$this->form_validation->set_message('isunique','There is already an entry for same Name');
+		return false;
+    else:
+		return true;
+	endif;
+
+		
+		}
+
+
+
 
 }
 
