@@ -50,10 +50,15 @@ class Mlist extends CI_Controller{
 			 ->callback_before_insert(array($this,'toupper'))
 			 ->callback_before_update(array($this,'toupper'));
 			 //if id name is 'not available', id number should not be required, else it should be required.
+			 /*
 			 $id_no_req = $this->input->post('id_name')=='NOT AVAILABLE'?'':'|required';
 			 $crud->set_rules('id_name', 'ID Name', 'trim');
 			 $crud->set_rules('id_no', 'ID Number', 'trim'.$id_no_req);
-			 $crud->set_rules('city', 'City', 'callback_checkcity', array('checkcity'=>'Country is India and city is name of a country'));
+			 */
+			 $crud->set_rules('id_no', 'ID Number', 'trim|callback_idreq');
+			 $crud->set_rules('city', 'City', 'callback_checkcity', array('checkcity'=>'Country is India and given City is name of  a country'));
+			 $crud->set_rules('dist', 'District', 'callback_checkdistrict', array('checkdistrict'=>'Country is India and given District is name of a country'));
+			 $crud->set_rules('state', 'State', 'callback_checkstate', array('checkstate'=>'Country is India and given State  is name of a country'));
 			
 			
 			// Get state
@@ -106,7 +111,52 @@ class Mlist extends CI_Controller{
 	endif;
 	}
 	
+	public function idreq($str){
+	if ($this->input->post('id_name') == 'NOT AVAILABLE'):
+		if ($str!=''):
+			$this->form_validation->set_message('idreq', 'ID number not allowed for NOT AVAILABLE id name');
+			return false;
+		else:
+			return true;
+		endif;
+	elseif ($str==''):
+		$this->form_validation->set_message('idreq', 'ID Number cannot be blank');
+		return false;
+	else:
+		return true;
+	endif;
+	
+	}
+	
+	
 	public function checkcity($str){
+	
+	if ($this->input->post('country')=='INDIA'):
+		if ($this->country_model->findname($str)):
+		return false;
+		else:
+		return true;
+		endif;
+	else:
+		return true;
+	endif;	
+}
+
+	public function checkdistrict($str){
+	
+	if ($this->input->post('country')=='INDIA'):
+		if ($this->country_model->findname($str)):
+		return false;
+		else:
+		return true;
+		endif;
+	else:
+		return true;
+	endif;	
+
+}
+	
+	public function checkstate($str){
 	
 	if ($this->input->post('country')=='INDIA'):
 		if ($this->country_model->findname($str)):
