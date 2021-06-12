@@ -15,6 +15,9 @@ $pdf->Cell(112,6, 'Pl print page no 3 for envelope',0,1,'C');
 $tm=50;
 $pdf->setTopMargin($tm);
 $pdf->AddPage();
+if ($det['date']==''):
+$det['date']=date('Y-m-d');
+endif;
 $pdf->Cell(112,6,date('F d, Y',strtotime($det['date'])),0,1,'R');
 $pdf->ln(5);
 $pdf->Cell(112,6,$det['name1'],0,1,'L');
