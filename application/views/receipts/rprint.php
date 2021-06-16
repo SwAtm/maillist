@@ -29,7 +29,7 @@ $pdf->SetFont('Times','',13);
 $pdf->Cell(123,5,$det['name'],0,1,'L');
 $pdf->Multicell(180,6,ucwords(strtolower($det['address'])),0,'L');
 $pdf->Cell(90,5,$det['city_pin'],0,0,'L');
-$pdf->Cell(90,5,($det['pan']!==''?'PAN: '.$det['pan']:''),0,1,'R');
+$pdf->Cell(90,5,($det['id_name']!=='NOT AVAILABLE'?$det['id_name'].': '.$det['id_no']:''),0,1,'R');
 $pdf->ln(3);
 $pdf->SetFont('Arial','I',13);
 $pdf->cell(180,5,'A sum of Rupees:',0,1,'L');
@@ -58,14 +58,27 @@ $pdf->cell(27,5,'Secretary',0,1,'L');
 $pdf->ln(1);
 $pdf->cell(180,0,'',1,1);
 //if ($det['amount']>2000 AND $det['mode_payment']=="Cash"):
+/*
 if ($det['pan']=='' OR $det['mode_payment']=="Cash"):
 $mess="Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
 elseif (strtotime($det['date'])<strtotime('01-06-2021')):
 $mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide order no DIT(E)/848/8E/109/69-70, dated 12-01-2009 which has been further extended in perpetuity by letter no DIT(E)/109/69-70 dated 26-09-2011. Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
 else:
 $mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide Provisional Approval No. AAAAR1077PF20214, dated 28-05-2021. Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
+*/
 
-endif;
+
+	if ($det['section_code']=='80G'):
+		if (strtotime($det['date'])<strtotime('01-06-2021')):
+			$mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide order no DIT(E)/848/8E/109/69-70, dated 12-01-2009 which has been further extended in perpetuity by letter no DIT(E)/109/69-70 dated 26-09-2011. Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
+		else:
+			$mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide Provisional Approval No. AAAAR1077PF20214, dated 28-05-2021. Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
+		endif;
+	else:
+		$mess="Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
+	endif;
+
+
 $pdf->ln(1);
 $pdf->SetFont('Arial','',10);
 $pdf->Multicell(180,5,$mess,0,'L');
