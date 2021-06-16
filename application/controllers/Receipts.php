@@ -119,8 +119,11 @@ class Receipts extends CI_Controller{
 		$data['donor']['name']=$donor['hon'].' '.$donor['name'];
 		$data['donor']['address']=$donor['add1'].($donor['add2']!==''?', '.$donor['add2']:'').($donor['add3']!==''?', '.$donor['add3']:''). ($donor['add4']!==''?', '.$donor['add4']:'');
 		$data['donor']['city_pin']=($donor['city']).($donor['pin']=NULL?'':' - '.$donor['pin']);
-		$data['donor']['pan']=$donor['pan'];
+		//$data['donor']['pan']=$donor['pan'];
 		$data['donor']['phone']=$donor['phone1'];
+		$data['donor']['id_name']=$donor['id_name'];
+		$data['donor']['id_code']=$donor['id_code'];
+		$data['donor']['id_no']=$donor['id_no'];
 		$data['amount']='';
 		$data['purpose']=$purpose;
 		$data['mop']=$mop;
@@ -170,6 +173,11 @@ class Receipts extends CI_Controller{
 		$_POST['sub_series']=$series1;
 		$_POST['no']=$rno;
 		$_POST['date']=date("Y-m-d");
+		if($_POST['mode_payment']!='Cash' AND $_POST['id_name']=='PAN' AND strpos($_POST['purpose'],'Donation')!==false):
+		$_POST['section_code']='80G';
+		else:
+		$_POST['section_code']='NA';
+		endif;
 		
 		unset($_POST['submit']);
 		if ($this->Receipts_model->adddata($_POST)):
@@ -321,7 +329,7 @@ class Receipts extends CI_Controller{
 		else:
 			$stdt=$_POST['stdt'];
 			$endt=$_POST['endt'];
-			$rhead = array ('Sl No.', 'PAN', 'Id_code', 'Section Code', 'Name', 'Address', 'Contact No', 'Donation Type', 'Mode of Receipt', 'Amount', 'Receipt No.', 'Receipt Date', 'Remarks');
+			$rhead = array ('Sl No.', 'ID_No','Id_code', 'Section Code', 'Name', 'Address', 'Contact No', 'Donation Type', 'Mode of Receipt', 'Amount', 'Receipt No.', 'Receipt Date', 'Remarks');
 			$rreport = $this->Receipts_model->rreport($stdt, $endt);
 			$filename = 'Receipts_'.date('d-m-Y',strtotime($stdt)).' - '.date('d-m-Y',strtotime($endt));
 			$fp = fopen(SAVEPATH.$filename, 'w');
@@ -330,22 +338,32 @@ class Receipts extends CI_Controller{
 			foreach ($rreport as $key=>$value):
 			//Pan,  id code, section code, name, address, contact no, donation type, mode of receipt, amount
 			$data['sl_no']	= $i;
-			$data['pan'] = $value['pan'];
+			$data['id_no'] = $value['id_no'];
+			/*
 			if ($value['pan']==''): 
 				$data['id_code'] = '';
 			else:
 				$data['id_code'] = '1';	
 			endif;
+			
 			if ($value['pan']=='' OR $value['mode_payment']=="Cash"):
 				$data['section_code'] = 'NA';
 			else:
 				$data['section_code'] = '80G';
 			endif;
+			*/
+			$data['id_code'] = $value['id_code'];
+			$data['section_code'] = $value['section_code'];
 			$data['name'] = $value['name'];
 			$data['address'] = $value['address'].' '.$value['city_pin'];
 			$data['contact_no'] = $value['phone'];
 			$data['donation_type'] = $value['purpose'];
-			$data['mode_of_receipt'] = $value['mode_payment'];
+			//$data['mode_of_receipt'] = $value['mode_payment'];
+			if ($value['mode_payment']=='Cash'):
+				$data['mode_of_receipt'] = 'Cash';
+			else:
+				$data['mode_of_receipt'] = 'Electronic Modes';
+			endif;
 			$data['amount'] = $value['amount'];
 			$data['r_number'] = $value['series'].'-'.$value['sub_series'].'-'.$value['no'];
 			$data['date'] = $value['date'];
