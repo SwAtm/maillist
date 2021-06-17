@@ -352,7 +352,11 @@ class Receipts extends CI_Controller{
 				$data['section_code'] = '80G';
 			endif;
 			*/
+			if (0==$value['id_code']):
+			$data['id_code']='';
+			else:
 			$data['id_code'] = $value['id_code'];
+			endif;
 			$data['section_code'] = $value['section_code'];
 			$data['name'] = $value['name'];
 			$data['address'] = $value['address'].' '.$value['city_pin'];
