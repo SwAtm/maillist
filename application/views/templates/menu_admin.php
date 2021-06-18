@@ -1,3 +1,4 @@
+<html>
 <?php
 Print "<table border=1 width=100% cellpadding=5 cellspacing=0>";
 Print "<tr bgcolor=magenta><td width=25% valign=middle align=center>";

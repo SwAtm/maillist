@@ -33,6 +33,7 @@ class Mlist extends CI_Controller{
 			 ->display_as('phone1', 'Phone')
 			 ->unset_clone()
 			 ->unset_delete()
+			 ->unset_add()
 			 ->required_fields('name','city','dist','state','country','id_name')
 			 ->field_type('city','dropdown', $this->city_model->list_all())
 			 ->field_type('state','dropdown', $this->state_model->list_all())
@@ -75,10 +76,11 @@ class Mlist extends CI_Controller{
 		$js.='<script>$(\'select[name="id_name"] option[value="PAN"]\').attr("selected", "selected");</script>';
 		$output->output .= $js;	
 	       }
-			
+		$output->extra="<table width = 100% bgcolor=pink><tr><td align = center><a href = ".site_url('mlist/mlistadd').">Add Recepient</a href></td></tr></table>";			
 			
 			//$output = $crud->render();
-			$this->_example_output($output);                
+			$this->_example_output_extra($output);                
+			
 			
 	}
 
@@ -88,6 +90,13 @@ class Mlist extends CI_Controller{
 	{
 		$this->load->view('templates/header');
 		$this->load->view('our_template.php',$output);    
+		$this->load->view('templates/footer');
+	}    
+	
+	function _example_output_extra($output = null)
+	{
+		$this->load->view('templates/header');
+		$this->load->view('our_template_extra.php',$output);    
 		$this->load->view('templates/footer');
 	}    
 	
@@ -336,6 +345,10 @@ class Mlist extends CI_Controller{
 			
 		}	
 
-
+		public function mlistadd() {
+		echo "view will come here";
+		$this->load->view('templates/footer');
+			
+		}
 }
 ?>

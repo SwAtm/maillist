@@ -48,7 +48,6 @@ function Timer() {
 Timer();
 </script>
 </body>
-<!--/body>
-</html>-->
+</html>
 
 
