@@ -5,7 +5,7 @@ class City_model extends CI_Model{
 		$this->load->database();
 	}
 	public function list_all()
-	//called by mlist/list_admin
+	//called by mlist/list_admin, mlist/mlistadd
 {
 	$sql=$this->db->select('name');
 	$sql=$this->db->from('city');

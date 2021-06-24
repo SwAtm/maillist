@@ -16,6 +16,7 @@ class Mlist extends CI_Controller{
 		$this->load->helper('pdf_helper');
 		$this->load->model('Mlist_model');
 		$this->load->model('id_type_model');
+		//$this->load->library('form_validation');	
 }
 
 	public function list_admin()
@@ -346,9 +347,48 @@ class Mlist extends CI_Controller{
 		}	
 
 		public function mlistadd() {
-		echo "view will come here";
+		
+		//new
+		$this->form_validation->set_rules('name', 'Name', 'required');
+		$this->form_validation->set_rules('city', 'City Name', 'required');
+		$this->form_validation->set_rules('dist', 'District Name', 'required');
+		$this->form_validation->set_rules('state', 'State Name', 'required');
+		$this->form_validation->set_rules('country', 'Country Name', 'required');
+		$this->form_validation->set_rules('id_no', 'ID No', 'callback_idcheck');
+		$data['idtype']= $this->id_type_model->list_all();
+		unset($data['idtype']['PAN']);
+		$data['idtype'] = array(''=>'Please Selct Other Id Type')+$data['idtype'];
+		$data['city'] = $this->city_model->list_all();
+		$data['yesno'] = array('Y'=>'Yes', 'N'=>'No');
+		if ($this->form_validation->run()==false):
+		$this->load->view('templates/header');
+		$this->load->view('mlist/mlistadd', $data);
 		$this->load->view('templates/footer');
+		else:
+		//validate
+		//add to mlist
+		echo "Add to data";
+		$this->load->view('templates/footer');
+		endif;
 			
+		}
+		
+		
+		public function idcheck($str){
+			if ($this->input->post('panno')=='' and $this->input->post('id_name')==''):
+				$this->form_validation->set_message('idcheck', 'Please select an ID');
+				return false;
+			elseif ($this->input->post('panno')=='' and $this->input->post('id_name')!=='' and $this->		input->post('id_name')!=='NOT AVAILABLE' and $str==''):
+				$this->form_validation->set_message('idcheck', 'Please enter ID No');
+				return false;
+			elseif ($this->input->post('panno')=='' and $this->input->post('id_name')=='NOT AVAILABLE' and $str!==''):
+				$this->form_validation->set_message('idcheck', 'You cannot have ID No for Not available ID Type');
+				return false;
+			endif;
+		
+		
+		
+		
 		}
 }
 ?>
