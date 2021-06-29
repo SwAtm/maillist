@@ -349,9 +349,9 @@ class Mlist extends CI_Controller{
 		public function mlistadd() {
 		
 		//new
-		$this->form_validation->set_rules('name', 'Name', 'required|strtoupper');
-		$this->form_validation->set_rules('city', 'City Name', 'required|strtoupper');
-		$this->form_validation->set_rules('dist', 'District Name', 'required|strtoupper');
+		$this->form_validation->set_rules('name', 'Name', 'required');
+		$this->form_validation->set_rules('city', 'City Name', 'required');
+		$this->form_validation->set_rules('dist', 'District Name', 'required');
 		$this->form_validation->set_rules('state', 'State Name', 'required');
 		$this->form_validation->set_rules('country', 'Country Name', 'required');
 		$this->form_validation->set_rules('id_no', 'ID No', 'callback_idcheck');
@@ -368,7 +368,6 @@ class Mlist extends CI_Controller{
 		//validate
 		//add to mlist
 		echo "Add to data";
-		print_r($_POST);
 		$this->load->view('templates/footer');
 		endif;
 			
