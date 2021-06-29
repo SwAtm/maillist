@@ -113,11 +113,17 @@ fetch('https://api.postalpincode.in/pincode/'+pin.value)
         state.value = 'Invalid';
         country.value = 'Invalid';
         }
-	   
-	   
-	  
   });
 }
+country.onchange= function(){
+//fetch ('http://localhost/maillist/index.php/mlistdata/country/'+country.value)
+fetch ('/mlistdata/country/'+country.value)
+.then(response=>response.json())
+.then(function(data){
+console.log(data);
+});
+}
+
 </script>
 </body>
 </html>
