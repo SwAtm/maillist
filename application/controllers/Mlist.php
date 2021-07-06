@@ -6,7 +6,7 @@ class Mlist extends CI_Controller{
 		$this->load->database();
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 		$this->load->library('session');
 		$this->load->model('mlist_model');
 		$this->load->model('city_model');
@@ -419,7 +419,7 @@ class Mlist extends CI_Controller{
 		//add to mlist
 		unset($data['panno']);
 		$this->mlist_model->add($data);
-		print_r($data);
+		//print_r($data);
 		echo "Data added successfully";
 		$this->load->view('templates/footer');
 		endif;
