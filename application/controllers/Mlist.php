@@ -348,7 +348,7 @@ class Mlist extends CI_Controller{
 
 		public function mlistadd() {
 		
-		//new
+		
 		$this->form_validation->set_rules('name', 'Name', 'required');
 		$this->form_validation->set_rules('city', 'City Name', 'required');
 		$this->form_validation->set_rules('dist', 'District Name', 'required');
@@ -358,16 +358,69 @@ class Mlist extends CI_Controller{
 		$data['idtype']= $this->id_type_model->list_all();
 		unset($data['idtype']['PAN']);
 		$data['idtype'] = array(''=>'Please Selct Other Id Type')+$data['idtype'];
-		$data['city'] = $this->city_model->list_all();
+		//$data['city'] = $this->city_model->list_all();
 		$data['yesno'] = array('Y'=>'Yes', 'N'=>'No');
+		$data['city_india'] = $this->city_model->get_name_indian();
+		$data['city_non_india'] = $this->city_model->get_name_non_indian();
+		//new
 		if ($this->form_validation->run()==false):
 		$this->load->view('templates/header');
 		$this->load->view('mlist/mlistadd', $data);
 		$this->load->view('templates/footer');
 		else:
-		//validate
+		//all ok, prep
+		//all cap
+		$data=$_POST;
+		foreach ($data as $k=>$v):
+			if (''==$v):
+			continue;
+			endif;
+			if ('pin'==$k OR 'id_code' == $k):
+			continue;
+			endif;
+		$data[$k] = strtoupper($v);
+		endforeach;
+		//id name, no, code
+		if (''!=trim($data['panno'])):
+		$data['id_code'] = 1;
+		$data['id_name'] = 'PAN';
+		$data['id_no'] = $data['panno'];
+		else:
+		//$data['id_name'] = $_POST['id_name'];
+		//$data['id_no'] = $_POST['id_no'];
+		$data['id_code'] = $this->id_type_model->get_code_from_name($data['id_name']);
+		endif;
+		//if city, district, state, country are new, add to resp tables
+		
+		if (!$this->city_model->findname($data['city'])):
+		$city['name'] = $data['city'];
+		$this->city_model->add($city);
+		endif;	
+		
+		if (!$this->district_model->findname($data['dist'])):
+		$dist['name'] = $data['dist'];
+		$this->district_model->add($dist);
+		endif;	
+		
+		if (!$this->state_model->findname($data['state'])):
+		$state['name'] = $data['state'];
+		$this->state_model->add($state);
+		endif;	
+		
+		if (!$this->country_model->findname($data['country'])):
+		$country['name'] = $data['country'];
+		$this->country_model->add($country);
+		endif;	
+		
+		
+		
+		
+		
 		//add to mlist
-		echo "Add to data";
+		unset($data['panno']);
+		$this->mlist_model->add($data);
+		print_r($data);
+		echo "Data added successfully";
 		$this->load->view('templates/footer');
 		endif;
 			

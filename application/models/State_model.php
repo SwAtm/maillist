@@ -28,8 +28,42 @@ class State_model extends CI_Model{
 	$result= $sql->row();
 	return $result->name;
 	}
+/*
+	public function get_id_from_name($name){
+		//called by mlist/mlistadd
+	$sql=$this->db->select('id');
+	$sql=$this->db->from('state');
+	$sql=$this->db->where('name',$name);
+	$sql=$this->db->get();
+	$result= $sql->row();
+	if ($result and $result->num_rows()!=0):
+	return $result->id;	
+	else:
+	return false;
+	endif;
+}
+*/
 
+	public function findname($str){
+		//called by mlist/mlistadd
+	$sql=$this->db->select('*');
+	$sql=$this->db->from('state');
+	$sql=$this->db->where('name',$str);
+	$num=$sql->count_all_results();
+	if ($num and $num>0):
+	return true;
+	else:
+	return false;
+	endif;
+	
+	}
 
+	public function add($state){
+		//called by mlist/mlistadd
+		$this->db->insert('state',$state);
+		//return true;
+	
+	}
 
 }
 ?>

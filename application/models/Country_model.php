@@ -30,6 +30,7 @@ class Country_model extends CI_Model{
 	}
 
 	public function findname($str){
+		//called by mlist/checkcity, checkdistrict, checkstate, mlistadd
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('country');
 	$sql=$this->db->where('name',$str);
@@ -41,6 +42,31 @@ class Country_model extends CI_Model{
 	endif;
 	
 	}
+
+/*	
+	public function get_id_from_name($name){
+		//called by mlist/mlistadd
+	$sql=$this->db->select('id');
+	$sql=$this->db->from('country');
+	$sql=$this->db->where('name',$name);
+	$sql=$this->db->get();
+	$result= $sql->row();
+	if ($result and $result->num_rows()!=0):
+	return $result->id;	
+	else:
+	return false;
+	endif;
+}
+*/
+	public function add($country){
+		//called by mlist/mlistadd
+		$this->db->insert('country',$country);
+		//return true;
+	
+	}
+
+
+
 
 }
 ?>

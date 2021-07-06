@@ -206,7 +206,12 @@ class Mlist_model extends CI_Model{
 		endif;	
 		}
 		
-		
+		public function add($data){
+		//called by mlist/mlistadd
+		$this->db->insert('mlist',$data);
+		//return true;
+	
+	}
 }
 
 

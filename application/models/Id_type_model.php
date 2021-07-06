@@ -19,7 +19,7 @@ class Id_type_model extends CI_Model{
 }
 
 	public function get_code_from_name($name){
-	//called by mlist/toupper
+	//called by mlist/toupper, mlist/mlistadd
 	$sql = $this->db->select('code');
 	$sql = $this->db->from('id_type');
 	$sql = $this->db->where('name',$name);
