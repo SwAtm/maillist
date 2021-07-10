@@ -372,12 +372,12 @@ class Mlist extends CI_Controller{
 		//all cap
 		$data=$_POST;
 		foreach ($data as $k=>$v):
-			if (''==$v):
+			/*if (''==$v):
 			continue;
 			endif;
 			if ('pin'==$k OR 'id_code' == $k):
 			continue;
-			endif;
+			endif;*/
 		$data[$k] = strtoupper($v);
 		endforeach;
 		//id name, no, code

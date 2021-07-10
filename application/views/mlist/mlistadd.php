@@ -55,7 +55,7 @@ echo validation_errors()?>
 <td><input type = "text" id = "city" name = "city" list = "mycity" size = "45"required>	
 <datalist id = "mycity"></datalist></td>	
 <td><label for "phone1">Phone 1</label></td>
-<td><input type = "text" id = "phone1" name = "phone1" value = "<?php echo set_value('phone1')?>" size = "45" maxlength = "30"></td>
+<td><input type = "number" id = "phone1" name = "phone1" value = "<?php echo set_value('phone1')?>" size = "45" max = "9999999999" maxlength = "10"></td>
 </tr>
 <tr>
 <td><label for "phone2">Phone 2</label></td>
