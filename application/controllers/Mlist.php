@@ -44,7 +44,7 @@ class Mlist extends CI_Controller{
 			 ->field_type('deleted','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('send','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('initiated','dropdown', array('Y'=>'Yes', 'N'=>'No'))
-			 ->field_type('japayajna','dropdown', array('Y'=>'Yes', 'N'=>'No'))
+			 //->field_type('japayajna','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('lang','dropdown', array('K'=>'Kannada', 'E'=>'English'))
 			 ->callback_column('name',array($this,'_callback_change_color'))
 			 ->add_action('receipt',base_url(IMGPATH.'rupee1.png'),'receipts/radd')

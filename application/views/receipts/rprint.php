@@ -72,10 +72,10 @@ $mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, v
 		if (strtotime($det['date'])<strtotime('01-06-2021')):
 			$mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide order no DIT(E)/848/8E/109/69-70, dated 12-01-2009 which has been further extended in perpetuity by letter no DIT(E)/109/69-70 dated 26-09-2011. Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
 		else:
-			$mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide Provisional Approval No. AAAAR1077PF20214, dated 28-05-2021. Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
+			$mess="Donations are exempt from Income Tax u/s 80G(5)(vi) of the IT Act 1961, vide Provisional Approval No. AAATR3497GF20214, dated 28-05-2021. Our PAN: AAATR3497G. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
 		endif;
 	else:
-		$mess="Our PAN: AAAAR1077P. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
+		$mess="Our PAN: AAATR3497G. Under Schedule I, Article 53, Exemption (b) of the Indian Stamp Act, Charitable Institutions are not required to issue any stamped receipt for amounts received by them.";
 	endif;
 
 

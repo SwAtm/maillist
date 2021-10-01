@@ -91,19 +91,19 @@ define('SAVEPATH','/home/freak/');
 define ('IMGPATH', 'application/');
 
 //name in header
-define ('NAME', 'Ramakrishna Mission Ashrama, Belgaum');
+define ('NAME', 'Ramakrishna Math, Bangalore');
 
 //name on receipt
-define ('NAMER', 'Ramakrishna Mission Ashrama');
+define ('NAMER', 'Ramakrishna Math');
 
 //address line 1 on receipt
-define ('ADD1', 'Fort, Belgaum, Karnataka - 590016');
+define ('ADD1', 'Bull Temple Road, Bangalore 560 008');
 
 //address line 2 on receipt
-define ('ADD2', 'Ph: 0831 2432789 / 2970320 / 321 :: email: belgaum@rkmm.org');
+define ('ADD2', 'Ph: 080 26613149  email: banguluru@rkmm.org');
 
 //designation
-define ('DESIGN', 'Secretary');
+define ('DESIGN', 'Adhyaksha');
 
 //name of adhyaksha/secy
-define ('DNAME', 'Swami Atmapranananda');
+define ('DNAME', 'Swami Nityasthananda');
