@@ -32,9 +32,9 @@ $pdf->MultiCell(112,6,$det['message2'],0);
 $pdf->ln(5);
 $pdf->Cell(112,6,$det['closing1'],0,1,'L');
 $pdf->ln(15);
-$pdf->Cell(112,6,"Swami Atmapranananda",0,1,'L');
+$pdf->Cell(112,6,DNAME,0,1,'L');
 $pdf->cell(13,6,'',0,0);
-$pdf->Cell(99,6,"Secretary",0,1,'L');
+$pdf->Cell(99,6,DESIGN,0,1,'L');
 //$pdf->SetY(210);
 //$pdf->Cell(112,5,'...',0,0,'C','',site_url('login/home'));
 

@@ -10,7 +10,13 @@ class Daccount_model extends CI_Model{
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('daccount');
 	$sql=$this->db->get();
-	return $sql->result_array();
+	$result = $sql->result_array();
+	if ($result):
+	return $result;
+	else:
+	return false;
+	endif;
+	
 }
 
 

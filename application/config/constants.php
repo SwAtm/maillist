@@ -89,3 +89,21 @@ define('SAVEPATH','/home/freak/');
 
 //define ('IMGPATH','../web_images/');
 define ('IMGPATH', 'application/');
+
+//name in header
+define ('NAME', 'Ramakrishna Mission Ashrama, Belgaum');
+
+//name on receipt
+define ('NAMER', 'Ramakrishna Mission Ashrama');
+
+//address line 1 on receipt
+define ('ADD1', 'Fort, Belgaum, Karnataka - 590016');
+
+//address line 2 on receipt
+define ('ADD2', 'Ph: 0831 2432789 / 2970320 / 321 :: email: belgaum@rkmm.org');
+
+//designation
+define ('DESIGN', 'Secretary');
+
+//name of adhyaksha/secy
+define ('DNAME', 'Swami Atmapranananda');

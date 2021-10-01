@@ -11,11 +11,15 @@ class City_model extends CI_Model{
 	$sql=$this->db->from('city');
 	$sql=$this->db->get();
 	$result= $sql->result_array();
+	if ($result):
 	foreach ($result as $res):
 	$result1[]=$res['name'];
 	endforeach;
 	$result2=array_combine($result1,$result1);
 	return $result2;
+	else:
+	return false;
+	endif;
 }
 
 	public function get_details($id)
@@ -33,10 +37,14 @@ class City_model extends CI_Model{
 		//called by mlist/mlistadd
 		$sql = $this->db->query('SELECT `name` FROM `city` WHERE not exists (select * from country where country.name = city.name)');
 		$result= $sql->result_array();
+		if ($result):
 		foreach ($result as $res):
 		$result1[]=$res['name'];
 		endforeach;
 		//$result2=array_combine($result1,$result1);
+		else:
+		$result1=array();
+		endif;
 		return $result1;
 	
 }
@@ -47,12 +55,15 @@ class City_model extends CI_Model{
 		//called by mlist/mlistadd
 		$sql = $this->db->query('SELECT `name` FROM `city` WHERE exists (select * from country where country.name = city.name)');
 		$result= $sql->result_array();
+		if ($result):
 		foreach ($result as $res):
 		$result1[]=$res['name'];
 		endforeach;
 		//$result2=array_combine($result1,$result1);
+		else:
+		$result1=array();
+		endif;
 		return $result1;
-	
 }
 	
 	/*

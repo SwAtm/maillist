@@ -90,11 +90,10 @@ echo validation_errors()?>
 	<option value = "K">Kannada</option>
 	<option value = "E">English</option>
 	</select></td>	
-		
 	<td><label for "initiated">Initiated</label></td>
 	<td><?php echo form_dropdown('initiated',$yesno,'N')?></td>
-	<td><label for "japayajna">Japayajna</label></td>
-	<td><?php echo form_dropdown('japayajna',$yesno,'N')?></td>
+	<!--<td><label for "japayajna">Japayajna</label></td>
+	<td><?php// echo form_dropdown('japayajna',$yesno,'N')?></td>-->
 	</tr>
 <tr><td><label for "ref">Reference</label></td>
 <td colspan = "9"><input type = "text" id = "ref" name = "ref" size = "100" maxlength = "100" ></td></tr></fieldset>

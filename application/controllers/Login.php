@@ -12,6 +12,13 @@ class Login extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->library('grocery_CRUD');
 		$this->load->model('pwd_model');
+		$this->load->model('city_model');
+		$this->load->model('district_model');
+		$this->load->model('state_model');
+		$this->load->model('country_model');
+		$this->load->model('Daccount_model');
+		$this->load->model('Pmode_model');
+		$this->load->model('id_type_model');
 		$this->load->library('session');
 	}
 	
@@ -34,7 +41,11 @@ else:
 		//if ($pwd['pwd']==password_hash($_POST['pwd'], PASSWORD_DEFAULT)):
 		
 		if(password_verify($_POST['pwd'],$pwd['pwd'])):
-			//redirect to admin menu
+			//check if mandatory tables are populated
+			if (!$this->Daccount_model->list_all() or !$this->Pmode_model->list_all() or !$this->city_model->list_all() or !$this->state_model->list_all() or !$this->district_model->list_all() or !$this->country_model->list_all() or !$this->id_type_model->list_all()):
+			die ("One or more of mandatory table/s is/are empty, please contact Sysadmin<a href =".site_url('login/verify').">Go home</a href>");
+			endif;
+		// all set redirect to admin menu
 		$this->session->logged='admin';
 		$this->home();
 		//$this->load->view('templates/header');
@@ -44,6 +55,8 @@ else:
 		$this->load->view('templates/header');
 		$this->load->view('login/login',$data);
 		endif;
+	
+		
 	else:
 	Echo "Admin Password Not set. Contact Sysadmin";
 	endif;

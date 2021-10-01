@@ -21,7 +21,6 @@ class Mlist extends CI_Controller{
 
 	public function list_admin()
 	{
-		
 		$crud = new grocery_CRUD();
 		$crud->set_table('mlist')
 		     ->set_subject('Recepient')
