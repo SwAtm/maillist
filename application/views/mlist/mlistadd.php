@@ -142,13 +142,14 @@ var cityuse = cityindia;
 var cityuse = citynonindia;
 }
 console.log(country.value);
-/*
+console.log(listhandle.options.length);
+
 if (listhandle.options.length>1){
 	for (i=listhandle.options.length-1; i>=0; i--){
-		listhandle[i].remove();
+		listhandle.options[i].remove();
 	}
 }
-*/
+
 for (i=0; i<=cityuse.length-1; i++){
 var option = document.createElement('option');
 //option.textContent = cityuse[i];
