@@ -128,7 +128,19 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
-
+		public function getkar_wo_blore(){
+		//called by mlist/labels_kar_wo_blore
+		$sql=$this->db->select ('id, hon , name, add1, add2, add3, add4, city, pin');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('state','KARNATAKA');
+		$sql=$this->db->where('city!=','BANGALORE');
+		$sql=$this->db->where('deleted','N');
+		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->get();
+		return $sql->result_array();
+		}
+		
 		public function getind_wo_karnataka()
 		//called by mlist/labels_ind_wo_karnataka
 	{

@@ -45,13 +45,13 @@ window.location.href=url
 <select name="selectname" size="1" onChange="pulldown_labels()">
 <option value=""> Labels</option>
 <option value="mlist/labels_blore">Bangalore
-<option value="mlist/labels_bgm">Belgaum
-<option value="mlist/labels_kar_wo_blore_bgm">Karnataka w/o Blore and Belgaum
+<!--<option value="mlist/labels_bgm">Belgaum-->
+<!--<option value="mlist/labels_kar_wo_blore_bgm">Karnataka w/o Blore and Belgaum-->
+<option value="mlist/labels_kar_wo_blore">Karnataka w/o Blore
 <option value="mlist/labels_ind_wo_karnataka">India w/o Karnataka
-<option value="mlist/labels_bgm_dist">Belgaum District
+<!--<option value="mlist/labels_bgm_dist">Belgaum District-->
 <option value="mlist/labels_kar">Karnataka
 <option value="mlist/labels_ind">India
-
 </select>
 </form>
 <?php
