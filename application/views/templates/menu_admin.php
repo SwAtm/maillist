@@ -52,6 +52,7 @@ window.location.href=url
 <!--<option value="mlist/labels_bgm_dist">Belgaum District-->
 <option value="mlist/labels_kar">Karnataka
 <option value="mlist/labels_ind">India
+
 </select>
 </form>
 <?php

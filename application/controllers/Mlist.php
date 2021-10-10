@@ -334,7 +334,6 @@ class Mlist extends CI_Controller{
 		//$this->output->append_output("Labels printed at ".SAVEPATH."<a href=".site_url('login/home').">Go Home</a href>");	
 			
 		}	
-		
 		public function labels_kar_wo_blore(){
 		$data['addresses']=$this->mlist_model->getkar_wo_blore();
 		$data['place']='Karnataka without Blore';

@@ -128,6 +128,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
+		
 		public function getkar_wo_blore(){
 		//called by mlist/labels_kar_wo_blore
 		$sql=$this->db->select ('id, hon , name, add1, add2, add3, add4, city, pin');
