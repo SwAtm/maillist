@@ -140,6 +140,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->order_by('name','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
+		
 		}
 		
 		public function getind_wo_karnataka()

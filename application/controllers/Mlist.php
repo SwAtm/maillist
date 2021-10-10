@@ -343,6 +343,7 @@ class Mlist extends CI_Controller{
 		}
 		
 		
+		
 		public function labels_ind_wo_karnataka()
 		{
 		$data['addresses']=$this->mlist_model->getind_wo_karnataka();
