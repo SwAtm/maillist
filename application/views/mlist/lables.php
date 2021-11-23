@@ -28,6 +28,26 @@ else:
 	endif;	
 endif;
 
+if ($data['add4']==''):
+$data['add4']=$data['city'].$data['pin'];
+$data['city']=$data['pin']='';
+endif;
+
+if ($data['add3']==''):
+$data['add3']=$data['add4'];
+$data['add4']=$data['city'].$data['pin'];
+$data['city']=$data['pin']='';
+endif;
+
+if ($data['add2']==''):
+$data['add2']=$data['add3'];
+$data['add3']=$data['add4'];
+$data['add4']=$data['city'].$data['pin'];
+$data['city']=$data['pin']='';
+endif;
+
+
+
 $y=$pdf->getY();
 $pdf->Cell(60,4,$data['id'],0,1,'L');
 $pdf->Cell(60,4,$data['hon']. ' '.$data['name'],0,1,'L');
