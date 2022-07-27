@@ -23,7 +23,7 @@ class Receipts extends CI_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('receipts')
 		     ->set_subject('Receipt')
-			 ->columns('id','series','sub_series', 'no', 'name', 'address', 'amount', 'purpose','mode_payment')
+			 ->columns('id','series','sub_series', 'no', 'date', 'name', 'address', 'amount', 'purpose','mode_payment')
 			 ->display_as('id','Receipt Id')
 			 ->display_as('series','Series')
 			 ->display_as('sub_series','Sub_Series')
