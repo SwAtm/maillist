@@ -329,44 +329,31 @@ class Receipts extends CI_Controller{
 		else:
 			$stdt=$_POST['stdt'];
 			$endt=$_POST['endt'];
-			$rhead = array ('Sl No.', 'ID_No','Id_code', 'Section Code', 'Name', 'Address', 'Contact No', 'Donation Type', 'Mode of Receipt', 'Amount', 'Receipt No.', 'Receipt Date', 'Remarks');
+			$rhead = array ('Sl No.', 'ID', 'ID_No', 'Section Code', 'Name', 'Address',  'Donation Type', 'Mode of Receipt', 'Amount', 'Receipt No.', 'Receipt Date', 'Remarks');
 			$rreport = $this->Receipts_model->rreport($stdt, $endt);
 			$filename = 'Receipts_'.date('d-m-Y',strtotime($stdt)).' - '.date('d-m-Y',strtotime($endt));
 			$fp = fopen(SAVEPATH.$filename, 'w');
 			fputcsv($fp, array_values($rhead)); 
 			$i=1;
 			foreach ($rreport as $key=>$value):
-			//Pan,  id code, section code, name, address, contact no, donation type, mode of receipt, amount
-			$data['sl_no']	= $i;
-			$data['id_no'] = $value['id_no'];
-			/*
-			if ($value['pan']==''): 
-				$data['id_code'] = '';
-			else:
-				$data['id_code'] = '1';	
-			endif;
-			
-			if ($value['pan']=='' OR $value['mode_payment']=="Cash"):
-				$data['section_code'] = 'NA';
-			else:
-				$data['section_code'] = '80G';
-			endif;
-			*/
 			if (0==$value['id_code']):
-			$data['id_code']='';
-			else:
-			$data['id_code'] = $value['id_code'];
+			continue;
 			endif;
+			$data['sl_no']	= $i;
+			if ($value['id_name']=="PAN"):
+			$data['id_name']="Permanent Account Number";
+			else:
+			$data['id_name']=$value['id_name'];
+			endif;
+			$data['id_no'] = $value['id_no'];
 			$data['section_code'] = $value['section_code'];
 			$data['name'] = $value['name'];
 			$data['address'] = $value['address'].' '.$value['city_pin'];
-			$data['contact_no'] = $value['phone'];
 			$data['donation_type'] = $value['purpose'];
-			//$data['mode_of_receipt'] = $value['mode_payment'];
 			if ($value['mode_payment']=='Cash'):
 				$data['mode_of_receipt'] = 'Cash';
 			else:
-				$data['mode_of_receipt'] = 'Electronic Modes';
+				$data['mode_of_receipt'] = 'Electronic modes including account payee cheque/draft';
 			endif;
 			$data['amount'] = $value['amount'];
 			$data['r_number'] = $value['series'].'-'.$value['sub_series'].'-'.$value['no'];
