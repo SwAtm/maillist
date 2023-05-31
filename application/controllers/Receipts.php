@@ -173,7 +173,7 @@ class Receipts extends CI_Controller{
 		$_POST['sub_series']=$series1;
 		$_POST['no']=$rno;
 		$_POST['date']=date("Y-m-d");
-		if($_POST['mode_payment']!='Cash' AND $_POST['id_name']=='PAN' AND strpos($_POST['purpose'],'Donation')!==false):
+		if($_POST['mode_payment']!='Cash' AND $_POST['id_code']!=0 AND strpos($_POST['purpose'],'Donation')!==false):
 		$_POST['section_code']='80G';
 		else:
 		$_POST['section_code']='NA';
