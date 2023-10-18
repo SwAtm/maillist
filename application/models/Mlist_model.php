@@ -212,6 +212,22 @@ class Mlist_model extends CI_Model{
 		//return true;
 	
 	}
+
+		public function get_details_idno($idno){
+		//called by receipts/get_id_no
+		$sql="select * from mlist where replace(id_no,' ','') like \"%\"?\"%\"";
+		$query=$this->db->query($sql, array($idno));
+		if ($query && $query->num_rows()>0):
+		return $query->row_array();
+		else:
+		return false;
+		endif;
+		
+		}
+
+
+
+
 }
 
 

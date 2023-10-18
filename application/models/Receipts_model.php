@@ -119,6 +119,31 @@ class receipts_model extends CI_Model{
 
 	}
 
+		public function mreport_subsr($stdt, $endt, $subsr){
+		//called by receipts/report_ex
+		$sql=$this->db->select('*');
+		$sql=$this->db->where('date>=', $stdt);
+		$sql=$this->db->where('date<=', $endt);
+		$sql=$this->db->where('sub_series', $subsr);
+		$sql=$this->db->where('deleted', 'N');
+		$sql=$this->db->get('receipts');
+		$result=$sql->result_array();
+		return $result;
+		}
+		
+		public function mtotal_subsr ($stdt, $endt, $subsr)
+		//called by receipts/report_ex
+	{
+		$sql=$this->db->select_sum('amount');
+		$sql=$this->db->where('date>=', $stdt);
+		$sql=$this->db->where('date<=', $endt);
+		$sql=$this->db->where('sub_series', $subsr);
+		$sql=$this->db->where('deleted', 'N');
+		$sql=$this->db->get('receipts');
+		$result=$sql->row_array();
+		$result=$result['amount'];
+		return $result;
+	}
 
 }
 ?>

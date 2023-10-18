@@ -58,8 +58,9 @@ endif;
 		$this->load->view('templates/header');
 		$this->load->view('templates/menu_admin');
 		else:
-		//$this->load->view('templates/menu_guest');
-		$this->index();
+		$this->load->view('templates/header');
+		$this->load->view('templates/menu_guest');
+		//$this->index();
 		endif;
 	}
 
