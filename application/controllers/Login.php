@@ -23,32 +23,25 @@ class Login extends CI_Controller {
 	}
 	
 	public function verify(){
+	$this->form_validation->set_rules('user', 'User Name', 'required');
 	$this->form_validation->set_rules('pwd', 'Password', 'required');
-if ($this->form_validation->run()==false):
-	$this->index();
-else:
-	//check if admin pwd is set
-	if ($pwd=$this->pwd_model->get_pwd()):
-	//print_r($pwd);
-	//compare with input
-		//if ($pwd['pwd']==password_hash($_POST['pwd'], PASSWORD_DEFAULT)):
-		
+	if ($this->form_validation->run()==false):
+		$this->index();
+	elseif ($pwd=$this->pwd_model->get_pwd($_POST['user'])):
 		if(password_verify($_POST['pwd'],$pwd['pwd'])):
-			//redirect to admin menu
-		$this->session->logged='admin';
+		$this->session->logged=$_POST['user'];
 		$this->home();
-		//$this->load->view('templates/header');
-		//$this->load->view('templates/menu_admin');
 		else:
 		$data['err']="Wrong Password<br>";
 		$this->load->view('templates/header');
 		$this->load->view('login/login',$data);
 		endif;
 	else:
-	Echo "Admin Password Not set. Contact Sysadmin";
+	$data['err']="Wrong User<br>";
+	$this->load->view('templates/header');
+	$this->load->view('login/login',$data);
 	endif;
 	 
-endif;
 	}
 	
 	public function home(){

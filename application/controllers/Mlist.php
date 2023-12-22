@@ -57,26 +57,17 @@ class Mlist extends CI_Controller{
 			 $crud->set_rules('id_name', 'ID Name', 'trim');
 			 $crud->set_rules('id_no', 'ID Number', 'trim'.$id_no_req);
 			 */
-			 $crud->set_rules('id_no', 'ID Number', 'trim|callback_idreq');
+			 $crud->set_rules('id_no', 'ID Number', 'callback_idcheck');
 			 $crud->set_rules('city', 'City', 'callback_checkcity', array('checkcity'=>'Country is India and given City is name of  a country'));
 			 $crud->set_rules('dist', 'District', 'callback_checkdistrict', array('checkdistrict'=>'Country is India and given District is name of a country'));
 			 $crud->set_rules('state', 'State', 'callback_checkstate', array('checkstate'=>'Country is India and given State  is name of a country'));
 			
 			
-			// Get state
-	       $state = $crud->getState(); 
-
-
-           // Call render function
+			// Call render function
                $output = $crud->render();
 
 			
-               if($state == 'add')
-	       {
-		$js='<script>$(\'select[name="country"] option[value="INDIA"]\').attr("selected", "selected");</script>';
-		$js.='<script>$(\'select[name="id_name"] option[value="PAN"]\').attr("selected", "selected");</script>';
-		$output->output .= $js;	
-	       }
+               
 		$output->extra="<table width = 100% bgcolor=pink><tr><td align = center><a href = ".site_url('mlist/mlistadd').">Add Recepient</a href></td></tr></table>";			
 			
 			//$output = $crud->render();
@@ -108,6 +99,7 @@ class Mlist extends CI_Controller{
 	$post_array[$k]=str_replace(",", '', $post_array[$k]);
 	endforeach;
 	$post_array['id_code']=$this->id_type_model->get_code_from_name($post_array['id_name']);
+	$post_array['id_no']=str_replace(' ','',$post_array['id_no']);
 	return $post_array;
 	}
 	
@@ -121,6 +113,7 @@ class Mlist extends CI_Controller{
 	endif;
 	}
 	
+	/*
 	public function idreq($str){
 	if ($this->input->post('id_name') == 'NOT AVAILABLE'):
 		if ($str!=''):
@@ -137,7 +130,7 @@ class Mlist extends CI_Controller{
 	endif;
 	
 	}
-	
+	*/
 	
 	public function checkcity($str){
 	
@@ -263,6 +256,7 @@ class Mlist extends CI_Controller{
 			 ->display_as('add1', 'Address1')
 			 ->display_as('add2', 'Address2')
 			 ->display_as('city', 'City')
+			 ->add_action('receipt',base_url(IMGPATH.'rupee1.png'),'receipts/radd')
 			 ->unset_edit()
 			 ->unset_delete()
 			 ->unset_add();
@@ -356,87 +350,74 @@ class Mlist extends CI_Controller{
 		$this->form_validation->set_rules('country', 'Country Name', 'required');
 		$this->form_validation->set_rules('id_no', 'ID No', 'callback_idcheck');
 		$data['idtype']= $this->id_type_model->list_all();
-		unset($data['idtype']['PAN']);
-		$data['idtype'] = array(''=>'Please Selct Other Id Type')+$data['idtype'];
-		//$data['city'] = $this->city_model->list_all();
 		$data['yesno'] = array('Y'=>'Yes', 'N'=>'No');
 		$data['city_india'] = $this->city_model->get_name_indian();
 		$data['city_non_india'] = $this->city_model->get_name_non_indian();
 		//new
 		if ($this->form_validation->run()==false):
-		$this->load->view('templates/header');
-		$this->load->view('mlist/mlistadd', $data);
-		$this->load->view('templates/footer');
+			$this->load->view('templates/header');
+			$this->load->view('mlist/mlistadd', $data);
+			$this->load->view('templates/footer');
 		else:
-		//all ok, prep
-		//all cap
-		$data=$_POST;
-		foreach ($data as $k=>$v):
-			/*if (''==$v):
-			continue;
-			endif;
-			if ('pin'==$k OR 'id_code' == $k):
-			continue;
-			endif;*/
-		$data[$k] = strtoupper($v);
-		endforeach;
-		//id name, no, code
-		if (''!=trim($data['panno'])):
-		$data['id_code'] = 1;
-		$data['id_name'] = 'PAN';
-		$data['id_no'] = $data['panno'];
-		else:
-		//$data['id_name'] = $_POST['id_name'];
-		//$data['id_no'] = $_POST['id_no'];
-		$data['id_code'] = $this->id_type_model->get_code_from_name($data['id_name']);
-		endif;
-		//if city, district, state, country are new, add to resp tables
-		
-		if (!$this->city_model->findname($data['city'])):
-		$city['name'] = $data['city'];
-		$this->city_model->add($city);
-		endif;	
-		
-		if (!$this->district_model->findname($data['dist'])):
-		$dist['name'] = $data['dist'];
-		$this->district_model->add($dist);
-		endif;	
-		
-		if (!$this->state_model->findname($data['state'])):
-		$state['name'] = $data['state'];
-		$this->state_model->add($state);
-		endif;	
-		
-		if (!$this->country_model->findname($data['country'])):
-		$country['name'] = $data['country'];
-		$this->country_model->add($country);
-		endif;	
-		
-		
-		
-		
-		
-		//add to mlist
-		unset($data['panno']);
-		$this->mlist_model->add($data);
-		//print_r($data);
-		echo "Data added successfully";
-		$this->load->view('templates/footer');
+			//all ok, prep
+			//all cap
+			$data=$_POST;
+			foreach ($data as $k=>$v):
+				$data[$k] = strtoupper($v);
+			endforeach;
+			//id no, code
+			$data['id_code'] = $this->id_type_model->get_code_from_name($data['id_name']);
+			$data['id_no']=str_replace(' ','',$data['id_no']);
+			
+			//if city, district, state, country are new, add to resp tables
+			//city dropdown is coming from city table. No need to check and add to city table.
+			/*
+			if (!$this->city_model->findname($data['city'])):
+				$city['name'] = $data['city'];
+				$this->city_model->add($city);
+			endif;	*/
+			
+			if (!$this->district_model->findname($data['dist'])):
+				$dist['name'] = $data['dist'];
+				$this->district_model->add($dist);
+			endif;	
+			
+			if (!$this->state_model->findname($data['state'])):
+				$state['name'] = $data['state'];
+				$this->state_model->add($state);
+			endif;	
+			
+			if (!$this->country_model->findname($data['country'])):
+				$country['name'] = $data['country'];
+				$this->country_model->add($country);
+			endif;	
+			//add to mlist
+			$this->mlist_model->add($data);
+			echo "Data added successfully";
+			$this->load->view('templates/footer');
 		endif;
 			
 		}
 		
 		
 		public function idcheck($str){
-			if ($this->input->post('panno')=='' and $this->input->post('id_name')==''):
-				$this->form_validation->set_message('idcheck', 'Please select an ID');
-				return false;
-			elseif ($this->input->post('panno')=='' and $this->input->post('id_name')!=='' and $this->		input->post('id_name')!=='NOT AVAILABLE' and $str==''):
-				$this->form_validation->set_message('idcheck', 'Please enter ID No');
-				return false;
-			elseif ($this->input->post('panno')=='' and $this->input->post('id_name')=='NOT AVAILABLE' and $str!==''):
+			$str=str_replace(' ','',$str);
+			$str=strtoupper($str);
+			if ($this->input->post('id_name')=='NOT AVAILABLE' and $str!==''):
 				$this->form_validation->set_message('idcheck', 'You cannot have ID No for Not available ID Type');
 				return false;
+			elseif ($this->input->post('id_name')!=='NOT AVAILABLE' and $str==''):
+				$this->form_validation->set_message('idcheck', 'Please provide ID No');
+				return false;	
+			elseif ($this->input->post('id_name')=='PAN' and !preg_match('/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',$str)):
+				$this->form_validation->set_message('idcheck', 'PAN Pattern mismatch');
+				return false;		
+			elseif ($this->input->post('id_name')=='ADHAAR' and !preg_match('/^[0-9]{12}$/',$str)):
+				$this->form_validation->set_message('idcheck', 'ADHAAR Pattern mismatch');
+				return false;			
+			else:
+			//$this->input->post('id_no')=$str;
+			return true;
 			endif;
 		
 		

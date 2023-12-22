@@ -17,6 +17,7 @@ class Receipts extends CI_Controller{
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		$this->load->model('mlist_model');
+		$this->load->model('Series_model');
 		$this->load->library('table');		
 }
 
@@ -25,16 +26,16 @@ class Receipts extends CI_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('receipts')
 		     ->set_subject('Receipt')
-			 ->columns('id','series','sub_series', 'no', 'date', 'name', 'address', 'amount', 'purpose','mode_payment')
+			 ->columns('id','series', 'no', 'date', 'name', 'address', 'amount', 'purpose','mode_payment')
 			 ->display_as('id','Receipt Id')
 			 ->display_as('series','Series')
-			 ->display_as('sub_series','Sub_Series')
 			 ->display_as('no','Receipt No')
 			 ->display_as('name',"Donor's name")
 			 ->display_as('address','Address')
 			 ->display_as('amount','Amount')
 			 ->display_as('purpose','Purpose')
 			 ->display_as('mode_payment', 'Mode of Payment')
+			 ->where('user', $this->session->logged)
 			 ->unset_add()
 			 ->unset_delete()
 			 ->unset_edit()
@@ -44,9 +45,9 @@ class Receipts extends CI_Controller{
 			 ->callback_column('name',array($this,'_callback_change_color'))
 			 ->add_action('Print',base_url(IMGPATH.'print.png'),'receipts/rprint')
 			 ->add_action('Delete',base_url(IMGPATH.'delete.jpeg'),'receipts/rdelete_confirm');
-				$crud->field_type('id', 'readonly');
-				$crud->field_type('series', 'readonly');
-				$crud->field_type('no', 'readonly');
+				//$crud->field_type('id', 'readonly');
+				//$crud->field_type('series', 'readonly');
+				//$crud->field_type('no', 'readonly');
 			//$operation=$crud->getState();
 			//if($operation == 'edit' || $operation == 'update' || $operation == 'update_validation'):
 			
@@ -96,10 +97,13 @@ class Receipts extends CI_Controller{
 	}
 
 	public function radd($id=null){
-	$this->form_validation->set_rules('amount', 'Amount', 'greater_than[0]');
+	$this->form_validation->set_rules('amount', 'Amount', 'required|greater_than[0]');
 	$this->form_validation->set_rules('mode_payment','Mode of Payment','required');
 	//not submitted
-	if ($this->form_validation->run()==false and empty($_POST)) :
+	if ($this->form_validation->run()==false) :
+		if (isset($_POST['id'])):
+		$id=$_POST['id'];
+		endif;
 		$donor=$this->Mlist_model->get_details($id);
 		$purpose1=$this->Daccount_model->list_all();
 		//remove indexes from array
@@ -107,10 +111,11 @@ class Receipts extends CI_Controller{
 			$purpose[$v['name']]=$v['name'];
 		endforeach;
 	
-		$mop1=$this->Pmode_model->list_all();
+		//$mop1=$this->Pmode_model->list_all();
 		//remove indexes from array
+		$mop1=$this->Series_model->get_pmode_per_user($this->session->logged);
 		foreach ($mop1 as $k=>$v):
-			$mop[$v['name']]=$v['name'];
+			$mop[$v['pmode']]=$v['pmode'];
 		endforeach;
 		/*make sub_series as index of the array. This will be posted and can be used to add to db
 		foreach ($mop1 as $k=>$v):
@@ -136,6 +141,7 @@ class Receipts extends CI_Controller{
 		$this->load->view('receipts/radd',$data);	
 		$this->load->view('templates/footer');
 	
+	/*
 	//submitted failed vlidation
 	elseif($this->form_validation->run()==false and !empty($_POST)):
 		//print_r($_POST);
@@ -144,7 +150,7 @@ class Receipts extends CI_Controller{
 		unset($_POST);
 		$_POST=array();
 		$this->radd ($id);
-		
+	*/	
 	
 	// submitted OK
 	else:
@@ -152,7 +158,8 @@ class Receipts extends CI_Controller{
 		unset($_POST['id']);
 		
 		$mop=$_POST['mode_payment'];
-		$series1=$this->Pmode_model->get_sub_series($mop)->sub_series;
+		//$series1=$this->Pmode_model->get_sub_series($mop)->sub_series;
+		$series=$this->Series_model->get_series($mop, $this->session->logged);
 				
 		/*if ($mop=="Cash"):
 			$series1="Cash";
@@ -168,19 +175,23 @@ class Receipts extends CI_Controller{
 			$_POST['tr_date']=null;
 		endif;
 		//$series1=$_POST['mode_payment'];
-		$series="Office";
-		$rno=$this->Receipts_model->get_max_no($series, $series1);
+		//$series="Office";
+		$rno=$this->Receipts_model->get_max_no($series);
 		$rno=++$rno['no'];
 		$_POST['series']=$series;
-		$_POST['sub_series']=$series1;
+		//$_POST['sub_series']=$series1;
 		$_POST['no']=$rno;
 		$_POST['date']=date("Y-m-d");
-		if($_POST['mode_payment']!='Cash' AND $_POST['id_code']!=0 AND strpos($_POST['purpose'],'Donation')!==false):
+		$pmode80G=$this->Pmode_model->get80G($_POST['mode_payment']);
+		$daccount80G=$this->Daccount_model->get80G($_POST['purpose']);
+		if ($pmode80G=='Y' and $daccount80G=='Y' and $_POST['id_code']!=0):
+		
+		//if($_POST['mode_payment']!='Cash' AND $_POST['id_code']!=0 AND strpos($_POST['purpose'],'Donation')!==false):
 		$_POST['section_code']='80G';
 		else:
 		$_POST['section_code']='NA';
 		endif;
-		
+		$_POST['user']=$this->session->logged;
 		unset($_POST['submit']);
 		if ($this->Receipts_model->adddata($_POST)):
 			$rid1=$this->Receipts_model->getmaxid();
@@ -269,7 +280,7 @@ class Receipts extends CI_Controller{
 		$date=$_POST['date'];
 		$this->load->view('templates/header');
 		$this->output->append_output("<br>Total Cash Receitps for ".date('d-m-Y',strtotime($date))."<br><br>");
-		if ($daydet=$this->Receipts_model->get_day_details($date)):
+		if ($daydet=$this->Receipts_model->get_day_details($date, $this->session->logged)):
 			$this->output->append_output("Receipt No. from: ".$daydet->minno." To: ".$daydet->maxno." = Rs. ".$daydet->amt."<br><br>");
 		else:
 			$this->output->append_output("No receipts");
@@ -293,18 +304,20 @@ class Receipts extends CI_Controller{
 		else:
 			$stdt=$_POST['stdt'];
 			$endt=$_POST['endt'];
-			$mop1=$this->Pmode_model->list_all();
+			//$mop1=$this->Pmode_model->list_all();
+			$mop1=$this->Series_model->get_pmode_per_user($this->session->logged);
 			$data['stdt']=$stdt;
 			$data['endt']=$endt;
 			foreach ($mop1 as $k=>$v):
-			$mop[$v['name']]=$v['name'];
+			//$mop[$v['name']]=$v['name'];
+			$mop[$v['pmode']]=$v['pmode'];
 			endforeach;
 			//$data['mop']=$mop;
 			//$this->load->view('receipts/mreport',$data);
 			
 			foreach ($mop as $value) {
-						$mreport[$value]['det']	= $this->Receipts_model->mreport($stdt, $endt, $value);
-						$mreport[$value]['total']=$this->Receipts_model->mtotal($stdt, $endt, $value);
+						$mreport[$value]['det']	= $this->Receipts_model->mreport($stdt, $endt, $value, $this->session->logged);
+						$mreport[$value]['total']=$this->Receipts_model->mtotal($stdt, $endt, $value, $this->session->logged);
 						}	
 			//endforeach;				
 
@@ -352,13 +365,13 @@ class Receipts extends CI_Controller{
 			$data['name'] = $value['name'];
 			$data['address'] = $value['address'].' '.$value['city_pin'];
 			$data['donation_type'] = $value['purpose'];
-			if ($value['mode_payment']=='Cash'):
-				$data['mode_of_receipt'] = 'Cash';
-			else:
-				$data['mode_of_receipt'] = 'Electronic modes including account payee cheque/draft';
-			endif;
+			//if ($value['mode_payment']=='Cash'):
+			$data['mode_of_receipt'] = $value['mode_payment'];
+			//else:
+				//$data['mode_of_receipt'] = 'Electronic modes including account payee cheque/draft';
+			//endif;
 			$data['amount'] = $value['amount'];
-			$data['r_number'] = $value['series'].'-'.$value['sub_series'].'-'.$value['no'];
+			$data['r_number'] = $value['series'].'-'.$value['no'];
 			$data['date'] = $value['date'];
 			$data['remarks'] = '';
 			fputcsv($fp, $data);
@@ -417,7 +430,11 @@ class Receipts extends CI_Controller{
 					$purpose[$v['name']]=$v['name'];
 				endforeach;
 			
-				$mop=array('ECS'=>'Cash', 'EUP'=>'UPI', 'ECH'=>'Cheque');
+				//$mop=array('ECS'=>'Cash', 'EUP'=>'UPI', 'ECH'=>'Cheque');
+				$mop1=$this->Series_model->get_pmode_per_user($this->session->logged);
+				foreach ($mop1 as $k=>$v):
+					$mop[$v['pmode']]=$v['pmode'];
+				endforeach;
 				$mop=array(''=>'Select Mode of Payment')+$mop;
 				$data['purpose']=$purpose;
 				$data['mop']=$mop;
@@ -429,19 +446,20 @@ class Receipts extends CI_Controller{
 				if ($_POST['tr_date']==''):
 					$_POST['tr_date']=null;
 				endif;
-				$series="ExtCtr";
-				$series1=$_POST['mop'];
-				$rno=$this->Receipts_model->get_max_no($series, $series1);
+				//$series="ExtCtr";
+				//$series1=$_POST['mop'];
+				$series=$this->Series_model->get_series($_POST['mop'], $this->session->logged);
+				$rno=$this->Receipts_model->get_max_no($series);
 				$rno=++$rno['no'];
 				$_POST['series']=$series;
-				$_POST['sub_series']=$_POST['mop'];
+				//$_POST['sub_series']=$_POST['mop'];
 				$_POST['no']=$rno;
 				$_POST['date']=date("Y-m-d");
 				$_POST['id_name']='NOT AVAILABLE';
 				$_POST['id_code']=0;
 				$_POST['section_code']='NA';
 				
-				
+				/*
 				if ($_POST['mop']=='ECS'):
 					$_POST['mode_payment']='Cash';
 				elseif ($_POST['mop']=='EUP'):	
@@ -449,6 +467,9 @@ class Receipts extends CI_Controller{
 				else:	
 					$_POST['mode_payment']='Cheque';
 				endif;
+				*/
+				$_POST['mode_payment']=$_POST['mop'];;
+				$_POST['user']=$this->session->logged;
 				unset($_POST['submit']);
 				unset($_POST['mop']);
 				if ($this->Receipts_model->adddata($_POST)):
@@ -480,7 +501,12 @@ class Receipts extends CI_Controller{
 					$purpose[$v['name']]=$v['name'];
 				endforeach;
 			
-				$mop=array('ECS'=>'Cash', 'EUP'=>'UPI', 'ECH'=>'Cheque');
+				//$mop=array('ECS'=>'Cash', 'EUP'=>'UPI', 'ECH'=>'Cheque');
+				$mop1=$this->Series_model->get_pmode_per_user($this->session->logged);
+				foreach ($mop1 as $k=>$v):
+					$mop[$v['pmode']]=$v['pmode'];
+				endforeach;
+				$mop=array(''=>'Select Mode of Payment')+$mop;
 			
 				$data['purpose']=$purpose;
 				$data['mop']=$mop;
@@ -493,14 +519,16 @@ class Receipts extends CI_Controller{
 				if ($_POST['tr_date']==''):
 					$_POST['tr_date']=null;
 				endif;
-				$series="ExtCtr";
-				$series1=$_POST['mop'];
-				$rno=$this->Receipts_model->get_max_no($series, $series1);
+				//$series="ExtCtr";
+				//$series1=$_POST['mop'];
+				$series=$this->Series_model->get_series($_POST['mop'], $this->session->logged);
+				$rno=$this->Receipts_model->get_max_no($series);
 				$rno=++$rno['no'];
 				$_POST['series']=$series;
-				$_POST['sub_series']=$_POST['mop'];
+				//$_POST['sub_series']=$_POST['mop'];
 				$_POST['no']=$rno;
 				$_POST['date']=date("Y-m-d");
+				//Presently accepting only Adhar or PAN.
 				if (strlen($_POST['id_no'])==12):
 					$_POST['id_name']='ADHAAR';
 					$_POST['id_code']=2;
@@ -508,19 +536,35 @@ class Receipts extends CI_Controller{
 					$_POST['id_name']='PAN';
 					$_POST['id_code']=1;
 				endif;
-				if($_POST['mop']!='ECS' AND strpos($_POST['purpose'],'Donation')!==false):
+				
+				$pmode80G=$this->Pmode_model->get80G($_POST['mop']);
+				$daccount80G=$this->Daccount_model->get80G($_POST['purpose']);
+				if ($pmode80G=='Y' and $daccount80G=='Y'):
+				
+				//if($_POST['mode_payment']!='Cash' AND $_POST['id_code']!=0 AND strpos($_POST['purpose'],'Donation')!==false):
 				$_POST['section_code']='80G';
 				else:
 				$_POST['section_code']='NA';
 				endif;
+		
 				
+				
+				/*
+				if($_POST['mop']!='ECS' AND strpos($_POST['purpose'],'Donation')!==false):
+				$_POST['section_code']='80G';
+				else:
+				$_POST['section_code']='NA';
+				endif;*/
+				/*
 				if ($_POST['mop']=='ECS'):
 					$_POST['mode_payment']='Cash';
 				elseif ($_POST['mop']=='EUP'):	
 					$_POST['mode_payment']='Bank Transfer SBI - 3404';
 				else:	
 					$_POST['mode_payment']='Cheque';
-				endif;
+				endif;*/
+				$_POST['mode_payment']=$_POST['mop'];
+				$_POST['user']=$this->session->logged;
 				unset($_POST['submit']);
 				unset($_POST['mop']);
 				if ($this->Receipts_model->adddata($_POST)):
@@ -555,9 +599,12 @@ class Receipts extends CI_Controller{
 				foreach ($purpose1 as $k=>$v):
 					$purpose[$v['name']]=$v['name'];
 				endforeach;
-				
-				$mop=array('ECS'=>'Cash', 'EUP'=>'UPI', 'ECH'=>'Cheque');
+				$mop1=$this->Series_model->get_pmode_per_user($this->session->logged);
+				foreach ($mop1 as $k=>$v):
+					$mop[$v['pmode']]=$v['pmode'];
+				endforeach;
 				$mop=array(''=>'Select Mode of Payment')+$mop;
+				//$mop=array('ECS'=>'Cash', 'EUP'=>'UPI', 'ECH'=>'Cheque');
 				$data['purpose']=$purpose;
 				$data['mop']=$mop;
 				
@@ -578,30 +625,45 @@ class Receipts extends CI_Controller{
 				if ($_POST['tr_date']==''):
 					$_POST['tr_date']=null;
 				endif;
-				$series="ExtCtr";
-				$series1=$_POST['mop'];
-				$rno=$this->Receipts_model->get_max_no($series, $series1);
+				//$series="ExtCtr";
+				//$series1=$_POST['mop'];
+				$series=$this->Series_model->get_series($_POST['mop'], $this->session->logged);
+				$rno=$this->Receipts_model->get_max_no($series);
 				$rno=++$rno['no'];
 				$_POST['series']=$series;
-				$_POST['sub_series']=$_POST['mop'];
+				//$_POST['sub_series']=$_POST['mop'];
 				$_POST['no']=$rno;
 				$_POST['date']=date("Y-m-d");
-						
-				if($_POST['mop']!='ECS' AND $_POST['id_code']!=0 AND strpos($_POST['purpose'],'Donation')!==false):
+				
+				$pmode80G=$this->Pmode_model->get80G($_POST['mop']);
+				$daccount80G=$this->Daccount_model->get80G($_POST['purpose']);
+				if ($pmode80G=='Y' and $daccount80G=='Y'):
+				
+				//if($_POST['mode_payment']!='Cash' AND $_POST['id_code']!=0 AND strpos($_POST['purpose'],'Donation')!==false):
 				$_POST['section_code']='80G';
 				else:
 				$_POST['section_code']='NA';
 				endif;
 				
+				
+				/*		
+				if($_POST['mop']!='ECS' AND $_POST['id_code']!=0 AND strpos($_POST['purpose'],'Donation')!==false):
+				$_POST['section_code']='80G';
+				else:
+				$_POST['section_code']='NA';
+				endif;
+				*/
+				/*
 				if ($_POST['mop']=='ECS'):
 					$_POST['mode_payment']='Cash';
 				elseif ($_POST['mop']=='EUP'):	
 					$_POST['mode_payment']='Bank Transfer SBI - 3404';
 				else:	
 					$_POST['mode_payment']='Cheque';
-				endif;
-								
+				endif;*/
+				$_POST['mode_payment']=$_POST['mop'];				
 				//unset($_POST);
+				$_POST['user']=$this->session->logged;
 				unset($_POST['submit']);
 				unset($_POST['mop']);
 				if ($this->Receipts_model->adddata($_POST)):
@@ -617,13 +679,14 @@ class Receipts extends CI_Controller{
 			endif;
 			}
 			
+			//not necessary
 			public function rlist_ex(){
 			$crud = new grocery_CRUD();
 			$crud->set_table('receipts')
-		     ->columns('id','sub_series', 'no', 'date', 'name', 'address', 'amount', 'purpose','mode_payment')
+		     ->columns('id','series', 'no', 'date', 'name', 'address', 'amount', 'purpose','mode_payment')
 			 ->display_as('id','Receipt Id')
 			 //->display_as('series','Series')
-			 ->display_as('sub_series','Sub_Series')
+			 ->display_as('series','Series')
 			 ->display_as('no','Receipt No')
 			 ->display_as('name',"Donor's name")
 			 ->display_as('address','Address')
@@ -633,10 +696,11 @@ class Receipts extends CI_Controller{
 			  ->order_by('id','desc')
 			 ->unset_edit()
 			 ->unset_clone()
-			 ->where('sub_series','ECS')
-			 ->or_where('sub_series','EUP')
-			 ->or_where('sub_series','ECH')
-			 ->callback_column('address',array($this,'_callback_reduce_width'))
+			 //->where('sub_series','ECS')
+			 //->or_where('sub_series','EUP')
+			 //->or_where('sub_series','ECH')
+			 ->set_relation('series', 'series', 'user', array('user'=>$this->session->logged))
+			  ->callback_column('address',array($this,'_callback_reduce_width'))
 			 ->callback_column('name',array($this,'_callback_reduce_width'))
 			 ->callback_column('name',array($this,'_callback_change_color'))
 			 ->add_action('Print',base_url(IMGPATH.'print.png'),'receipts/rprint');
@@ -645,6 +709,7 @@ class Receipts extends CI_Controller{
 			$this->_example_output($output);                
 			}
 			
+			//not necessary
 			public function report_ex(){
 			$this->form_validation->set_rules('stdt','Starting Date','required');	
 			$this->form_validation->set_rules('endt','Ending Date','required');	

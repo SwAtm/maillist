@@ -52,8 +52,9 @@ echo validation_errors()?>
 <td><label for "city">City</label></td>
 <!--<td><input type = "text" id = "city" name = "city" value = "<?//php echo set_value('city')?>" size = "25" maxlength = "25"  ></td>-->
 <!--<td><div id = "mydiv"><select id = "city" name = "city"></select></div></td>-->
-<td><input type = "text" id = "city" name = "city" list = "mycity" size = "45"required>	
-<datalist id = "mycity"></datalist></td>	
+<!--<td><input type = "text" id = "city" name = "city" list = "mycity" size = "45"required>	
+<datalist id = "mycity"></datalist></td>	-->
+<td><select id = "mycity" name = "city" style="width: 150px;" required></select></td>
 <td><label for "phone1">Phone 1</label></td>
 <td><input type = "number" id = "phone1" name = "phone1" value = "<?php echo set_value('phone1')?>" size = "45" max = "9999999999" maxlength = "10"></td>
 </tr>
@@ -70,11 +71,9 @@ echo validation_errors()?>
 <table class = "table1" border = "1" width = "98%">
 <tr><fieldset>
 	<legend align = "center" style = "color:blue"><b>Unique ID Details</b></legend>
-<td width = "30%">Please Select One of the Two</td>
-<td width = "15%"><label for "panno">PAN</label></td>
-<td width = "15%"><input type = "text" id = "panno" name = "panno" value = "<?php echo set_value('panno')?>" size = "35" maxlength = "15"></td>
-<td width = "15%"><?php echo form_dropdown('id_name',$idtype)?></td>
-<td width = "15%"><input type = "text" id = "id_no" name = "id_no" value = "<?php echo set_value('id_no')?>" size = "25" maxlength = "15"></td>
+<td width = "30%">Please Select ID Type</td>
+<td width = "30%"><?php echo form_dropdown('id_name',$idtype)?></td>
+<td width = "30%"><input type = "text" id = "id_no" name = "id_no" value = "<?php echo set_value('id_no')?>" size = "25" maxlength = "15"></td>
 </tr>
 </fieldset>
 </table>
@@ -111,7 +110,7 @@ var pin = document.querySelector('#pin');
 var dist = document.querySelector('#dist');
 var state = document.querySelector('#state');
 var country = document.querySelector('#country');
-var city = document.querySelector('#city');
+var city = document.querySelector('#mycity');
 pin.onblur = function(){ 
 fetch('https://api.postalpincode.in/pincode/'+pin.value)
   .then(response => response.json())
@@ -141,8 +140,7 @@ var cityuse = cityindia;
 }else{
 var cityuse = citynonindia;
 }
-console.log(country.value);
-console.log(listhandle.options.length);
+
 
 if (listhandle.options.length>1){
 	for (i=listhandle.options.length-1; i>=0; i--){
@@ -152,13 +150,14 @@ if (listhandle.options.length>1){
 
 for (i=0; i<=cityuse.length-1; i++){
 var option = document.createElement('option');
-//option.textContent = cityuse[i];
+option.textContent = cityuse[i];
 option.value = cityuse[i];
 listhandle.appendChild(option);
 //console.log(cityuse[i]);
 
 }
-
+console.log(country.value);
+console.log(listhandle.options.length);
 }
 
 /*

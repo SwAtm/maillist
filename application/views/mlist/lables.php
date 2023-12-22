@@ -1,7 +1,7 @@
 <?php
 tfpdf();
 $pdf = new tFPDF('L','mm',array(210,30));
-$lm=8;
+$lm=10;
 $font='Arial';
 $fs=14;
 $tm=15;
@@ -72,7 +72,7 @@ $pdf->SetLeftMargin($lm);
 		$pdf->AddPage('P',array(210,297));
 		$pdf->SetY(15);
 	else:
-		$pdf->SetY($y+9.5);
+		$pdf->SetY($y+11);
 	endif;
 endif;
 endforeach;

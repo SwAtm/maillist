@@ -14,10 +14,12 @@ class Daccount extends CI_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('daccount')
 		     ->set_subject('Donation Account')
-			 ->columns('id', 'name')
+			 ->columns('id', 'name', 'G80')
 			 ->display_as('id','Donation Account Id')
 			->display_as('name','Donation Account Name')
+			->display_as('G80','80G Applicable?')
 			->set_rules('name', 'Donation Account Name', 'required|callback_isunique')
+			->set_rules('G80', '80G Applicablity', 'required|callback_G80')
 			->callback_before_insert(array($this,'toupper'))
 			->callback_before_update(array($this,'toupper'))
 			->callback_column('name', array($this, '_callback_width' ));
@@ -69,7 +71,14 @@ class Daccount extends CI_Controller{
 
 		
 		}
-	
+	public function G80($value){
+	if (strtoupper($value)=='Y' or strtoupper($value)=='N'):
+	return true;
+	else:
+	$this->form_validation->set_message('G80','Only Y or N Accepted');
+	return false;
+	endif;
+	}
 
 }
 

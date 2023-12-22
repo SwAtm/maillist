@@ -30,15 +30,8 @@ echo "<tr><td align = middle id = time>";
 echo "</td></tr>";
 //echo "<tr><td align=middle>".date('l jS \of F Y h:i:s A')."</td></tr>";
 echo "<tr><td>";
-if (null!==$this->session->logged AND $this->session->logged=='admin'):
-		echo "Logged in as ".$this->session->logged."<a href=".site_url('login/logout')."> Log Out</a>";
-else:
-//echo "Logged in as Guest. Log in as <a href=".site_url('login/index')."> Admin</a>";
-//echo '';
-echo "Logged in as Guest<a href=".site_url('login/logout')."> Log Out</a>";
-endif;
+echo "Logged in as ".$this->session->logged."<a href=".site_url('login/logout')."> Log Out</a>";
 echo "</td></tr></table>";
-
 ?>
 <script type="text/javascript">
 function Timer() {

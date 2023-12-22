@@ -17,11 +17,11 @@ $(document).ready(function() {
         document.forms['donation'].elements['amt'].select();
 
 		$("#mop").change(function() {
-			if ($(this).val() == "ECS") {
-			//if ($("option:selected", this).text() == "Cash") {
+			//if ($(this).val() == "ECS") {
+			if ($("option:selected", this).text() == "Cash") {
 				$('#ch_notohide').hide();
 				$('#tr_dttohide').hide();
-			} else if ($(this).val()=="ECH") {
+			} else if ($("option:selected", this).text() == "Cheque") {
 				$('#ch_notohide').show();
 				$('#tr_dttohide').show();
     

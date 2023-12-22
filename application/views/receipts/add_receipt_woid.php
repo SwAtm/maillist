@@ -17,11 +17,11 @@ $(document).ready(function() {
         document.forms['donation'].elements['name'].select();
 
 		$("#mop").change(function() {
-			if ($(this).val() == "ECS") {
-			//if ($("option:selected", this).text() == "Cash") {
+			//if ($(this).val() == "ECS") {
+			if ($("option:selected", this).text() == "Cash") {
 				$('#ch_notohide').hide();
 				$('#tr_dttohide').hide();
-			} else if ($(this).val()=="ECH") {
+			} else if ($("option:selected", this).text() == "Cheque") {
 				$('#ch_notohide').show();
 				$('#tr_dttohide').show();
     
@@ -51,7 +51,7 @@ echo "<tr><td>City_Pin</td><td colspan=3>".form_input(array('name'=>'city_pin','
 echo "<tr><td>Phone No</td><td colspan=3>".form_input(array('name'=>'phone','value'=>set_value('phone'),'maxlength'=>'30', 'id'=>'phone'))."</td></tr>";
 echo "<tr><td>Amount</td><td colspan=3>".form_input(array('name'=>'amount', 'value'=>set_value('amount'),'maxlength'=>'13', 'id'=>'amt'))."</td></tr>";
 echo "<tr><td>Purpose</td><td colspan=3>".form_dropdown('purpose',$purpose, 'Donation - Durga Pooja Celebrations')."</td></tr>";
-echo "<tr><td>Mode of Payment</td><td>".form_dropdown('mop',$mop,'ECS',array('id'=>'mop'))."</td>";
+echo "<tr><td>Mode of Payment</td><td>".form_dropdown('mop',$mop,'',array('id'=>'mop'))."</td>";
 echo "<td style='border: none'>";
 ?>
 <div id="ch_notohide"><label for="ch_no">Ch_No </label><input type="text" name="ch_no" value="" id="ch_no" maxlength=6 size=6></div>

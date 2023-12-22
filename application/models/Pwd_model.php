@@ -4,12 +4,12 @@ class pwd_model extends CI_Model{
 		{		
 		$this->load->database();
 	}
-	public function get_pwd()
+	public function get_pwd($user)
 	//called by login/verify
 {
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('pwd');
-	$sql=$this->db->where('user',"admin");
+	$sql=$this->db->where('user', $user);
 	$sql=$this->db->get();
 	if ($sql && $sql->num_rows()>0):
 	return $sql->row_array();

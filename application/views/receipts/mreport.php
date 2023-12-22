@@ -59,7 +59,7 @@ $pdf->cell(30,5,'Amount',1,1,'C');;
 				endif;
 			
 				$pdf->cell(25,5*$lno,date('d-m-Y',strtotime($val['date'])),1,0,'C');
-				$pdf->cell(20,5*$lno,$val['sub_series']." - ".$val['no'],1,0,'C');
+				$pdf->cell(20,5*$lno,$val['series']." - ".$val['no'],1,0,'C');
 				$x=$pdf->GetX();
 				$y=$pdf->GetY();
 				$pdf->Multicell(50,5,$val['name'],1,'C');

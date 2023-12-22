@@ -72,7 +72,7 @@ class City_model extends CI_Model{
 */
 
 	public function findname($str){
-		//called by mlist/mlistadd
+		//called by mlist/mlistadd??
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('city');
 	$sql=$this->db->where('name',$str);
@@ -86,7 +86,7 @@ class City_model extends CI_Model{
 	}
 
 	public function add($city){
-		//called by mlist/mlistadd
+		//called by mlist/mlistadd??
 		$this->db->insert('city',$city);
 		//return true;
 	

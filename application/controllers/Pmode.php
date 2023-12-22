@@ -14,15 +14,16 @@ class Pmode extends CI_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('pmode')
 		     ->set_subject('Payment Mode')
-			 ->columns('id', 'name', 'sub_series')
+			 ->columns('id', 'name', 'G80')
 			 ->display_as('id','Payment Mode Id')
 			->display_as('name','Payment Mode Name')
-			->display_as('sub_series','Sub Series')
+			->display_as('G80','80G Applicable?')
 			->unset_delete()
 			->unset_edit()
 			//->set_rules('name', 'Payment Mode Name', 'required|is_unique[pmode.name]')
 			->set_rules('name', 'Payment Mode Name', 'required|callback_pmode_check')
-			->set_rules('sub_series', 'Sub Series', 'required')
+			->set_rules('G80', '80G Applicablity', 'required|callback_G80')
+			
 			->callback_before_insert(array($this,'toupper'))
 			->callback_before_update(array($this,'toupper'));
 			$output = $crud->render();
@@ -70,22 +71,16 @@ class Pmode extends CI_Controller{
 		return true;
 	endif;
 
-  
-/*	$num_row = $this->db->where('name',$str)->get('pmode')->num_rows();
-	if ($num_row >= 1)
-		{
-		$this->form_validation->set_message('name', 'The Payment Mode already exists');
-		return FALSE;
-		}
-	else
-		{
-		return TRUE;
-		}
-*/
-
 }
 	
-	
+	public function G80($value){
+	if (strtoupper($value)=='Y' or strtoupper($value)=='N'):
+	return true;
+	else:
+	$this->form_validation->set_message('G80','Only Y or N Accepted');
+	return false;
+	endif;
+	}	
 	
 	
 	

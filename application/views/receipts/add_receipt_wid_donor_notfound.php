@@ -17,11 +17,11 @@ $(document).ready(function() {
         document.forms['donation'].elements['name'].select();
 
 		$("#mop").change(function() {
-			if ($(this).val() == "ECS") {
-			//if ($("option:selected", this).text() == "Cash") {
+			//if ($(this).val() == "ECS") {
+			if ($("option:selected", this).text() == "Cash") {
 				$('#ch_notohide').hide();
 				$('#tr_dttohide').hide();
-			} else if ($(this).val()=="ECH") {
+			} else if ($("option:selected", this).text() == "Cheque") {
 				$('#ch_notohide').show();
 				$('#tr_dttohide').show();
     
@@ -29,8 +29,8 @@ $(document).ready(function() {
 				$('#ch_notohide').hide();
 				$('#tr_dttohide').show();
 			}
-		});
-  
+		});  
+		
 		$("#mop").trigger("change");
 });
 </script>
