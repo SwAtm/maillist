@@ -7,7 +7,7 @@ class Receipts extends CI_Controller{
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
 		$this->load->library('session');
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 		$this->load->model('Receipts_model');
 		$this->load->model('Mlist_model');
 		$this->load->model('Daccount_model');
