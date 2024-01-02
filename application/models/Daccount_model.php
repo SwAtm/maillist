@@ -9,6 +9,7 @@ class Daccount_model extends CI_Model{
 {
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('daccount');
+	$sql=$this->db->order_by('name');
 	$sql=$this->db->get();
 	return $sql->result_array();
 }

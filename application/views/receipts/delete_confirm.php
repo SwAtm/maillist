@@ -1,7 +1,7 @@
 <?php
 echo form_open('receipts/rdelete','',array('id'=>$det['id']));
 echo "<table border=1 align=center>";
-echo "<tr><td>Receipt</td><td>".$det['series']." ".$det['sub_series']." ".$det['no']." ".$det['date']."</td></tr>";
+echo "<tr><td>Receipt</td><td>".$det['series']." ".$det['no']." ".$det['date']."</td></tr>";
 echo "<tr><td>Name</td><td>".$det['name']."</td></tr>";
 echo "<tr><td>Address</td><td>".$det['address']."</td></tr>";
 echo "<tr><td>Amount</td><td>".$det['amount']."</td></tr>";
