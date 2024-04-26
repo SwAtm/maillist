@@ -4,7 +4,8 @@ $pdf = new tFPDF('L','mm',array(210,30));
 $lm=10;
 $font='Arial';
 $fs=14;
-$tm=15;
+//$tm=15;
+$tm=12;
 $pdf->setTopMargin($tm);
 $pdf->setLeftMargin($lm);
 $pdf->SetAutoPageBreak(false);
@@ -70,9 +71,9 @@ $pdf->SetX($lm);
 $pdf->SetLeftMargin($lm);
 	if (297-$y<43):
 		$pdf->AddPage('P',array(210,297));
-		$pdf->SetY(15);
+		//$pdf->SetY(15);
 	else:
-		$pdf->SetY($y+11);
+		$pdf->SetY($y+11.25);
 	endif;
 endif;
 endforeach;
