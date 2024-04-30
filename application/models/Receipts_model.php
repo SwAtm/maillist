@@ -161,6 +161,78 @@ class receipts_model extends CI_Model{
 		$result=$result['amount'];
 		return $result;
 	}
+	
+			public function xreport_purpose($stdt, $endt)
+		//called by receipts/xml_report
+	{
+		$sql=$this->db->distinct();
+		$sql=$this->db->select('purpose');
+		$sql=$this->db->where('date>=', $stdt);
+		$sql=$this->db->where('date<=', $endt);
+		$sql=$this->db->where('deleted', 'N');
+		$sql=$this->db->get('receipts');
+		$result=$sql->result_array();
+		return $result;
 
+	}
+	
+		public function xreport_mop($stdt, $endt)
+		//called by receipts/xml_report
+	{
+		$sql=$this->db->distinct();
+		$sql=$this->db->select('mode_payment');
+		$sql=$this->db->where('date>=', $stdt);
+		$sql=$this->db->where('date<=', $endt);
+		$sql=$this->db->where('deleted', 'N');
+		$sql=$this->db->get('receipts');
+		$result=$sql->result_array();
+		return $result;
+
+	}
+	
+		public function xreport($stdt, $endt)
+	//called by receipts/xml_report
+	{
+		$sql=$this->db->select('*');
+		$sql=$this->db->where('date>=', $stdt);
+		$sql=$this->db->where('date<=', $endt);
+		$sql=$this->db->where('deleted', 'N');
+		//$sql=$this->db->like('purpose', 'Donation');
+		$sql=$this->db->get('receipts');
+		$result=$sql->result_array();
+		return $result;
+
+	}
+/*
+	public function arrayToXml($array, $rootElement = null, $xml = null) {
+		$_xml = $xml;
+	
+			// If there is no Root Element then insert root
+			if ($_xml === null) {
+				$_xml = new SimpleXMLElement($rootElement !== null ? $rootElement : '<root/>');
+			}
+			
+			// Visit all key value pair
+			foreach ($array as $k => $v) {
+				
+				// If there is nested array then
+				if (is_array($v)) { 
+					
+					// Call function for nested array
+					$this->arrayToXml($v, $k, $_xml->addChild($k));
+					}
+					
+				else {
+					
+					// Simply add child element. 
+					$_xml->addChild($k, $v);
+				}
+			}
+			
+			//return $_xml->asXML();
+			$_xml->saveXML('/home/freak/tally.xml');
+		}
+	
+	*/
 }
 ?>

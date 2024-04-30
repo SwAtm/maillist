@@ -739,8 +739,81 @@ class Receipts extends CI_Controller{
 			endif;
 	}
 	
+		
+		
+		public function xml_report()
+	{
+
+		$this->form_validation->set_rules('stdt','Starting Date','required');	
+		$this->form_validation->set_rules('endt','Ending Date','required');	
+
+		//unsubmitted/failed
+		if (($this->form_validation->run()==false and (!isset($_POST) or empty($_POST))) or ($this->form_validation->run()==false and isset($_POST['submit']))):
+			$this->load->view('templates/header');
+			$this->load->view('receipts/xreport_get_dates');
+			$this->load->view('templates/footer');
+		//OK	
+		elseif (isset($_POST['submit'])):
+			$stdt=$_POST['stdt'];
+			$endt=$_POST['endt'];
+			$data['stdt']=$stdt;
+			$data['endt']=$endt;
+			$data['x_purpose']=$this->Receipts_model->xreport_purpose($stdt, $endt);
+			$data['x_mop']=$this->Receipts_model->xreport_mop($stdt, $endt);
+			//$data['x_purp_mop']=$x_purpose+$x_mop;
+			$this->load->view('templates/header');
+			$this->load->view('receipts/xreprot_get_purpose', $data);
+			$this->load->view('templates/footer');
+		
+		elseif (isset($_POST['generate'])):
+			$puracc=$_POST['puracc'];
+			$mopacc=$_POST['mopacc'];
+			$stdt=$_POST['stdt'];
+			$endt=$_POST['endt'];
+			$details=$this->Receipts_model->xreport($stdt, $endt);
+			$this->load->view('templates/header');
+			//print_r($details);
+			//print_r($puracc);
+			//print_r($mopacc);
+			$finalarr=array();
+			foreach ($details as $dkey=>$dval):
+				$finalarr[$dkey]['date']=$dval['date'];
+				$finalarr[$dkey]['narration']=$dval['name'].', '. $dval['address'].', '.$dval['city_pin'].', Ph: '.$dval['phone'].', '. $dval['id_name'].': '. $dval['id_no'].', '. $dval['pmt_details'].', Tr Date: '.$dval['tr_date'];
+				$finalarr[$dkey]['vtype']='Receipt1';
+				$finalarr[$dkey]['vnumber']=$dval['series'].'-'.$dval['no'];
+				$finalarr[$dkey]['edate']=$dval['date'];
+				$finalarr[$dkey]['amount']=$dval['amount'];
+				foreach ($puracc as $pckey=>$pcval):
+					if($dval['purpose']==$pcval['purpose']):
+					$finalarr[$dkey]['cracc']=$pcval['account'];
+					else:
+					continue;
+					endif;
+				endforeach;	
 			
+				foreach ($mopacc as $mckey=>$mcval):
+					if($dval['mode_payment']==$mcval['mop']):
+					$finalarr[$dkey]['dracc']=$mcval['account'];
+					else:
+					continue;
+					endif;
+				endforeach;	
 			
+			endforeach;
+			//echo "Printing final array<br>";
+			//echo "<pre>";
+			
+			//echo "</pre>";
+			//$finalarrxml=$this->Receipts_model->arrayToXml($finalarr);
+			//$this->Receipts_model->arrayToXml($finalarr);
+			$data['finalarr']=$finalarr;
+			$this->load->view('receipts/xml', $data);
+			$this->load->view('templates/footer');
+			//print_r($finalarrxml);
+			//print_r($finalarr);	
+		endif;
+			
+}			
 
 }
 ?>
