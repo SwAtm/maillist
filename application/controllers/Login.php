@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if(!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends CI_Controller {
 
@@ -13,6 +13,7 @@ class Login extends CI_Controller {
 		$this->load->library('grocery_CRUD');
 		$this->load->model('pwd_model');
 		$this->load->library('session');
+		//$this->output->enable_profiler(TRUE);
 	}
 	
 	public function index(){
@@ -50,10 +51,11 @@ class Login extends CI_Controller {
 		if (null!==$this->session->logged AND $this->session->logged=='admin'):
 		$this->load->view('templates/header');
 		$this->load->view('templates/menu_admin');
-		else:
+		elseif (null!==$this->session->logged AND $this->session->logged=='user1'):
 		$this->load->view('templates/header');
 		$this->load->view('templates/menu_guest');
-		//$this->index();
+		else:
+		$this->index();
 		endif;
 	}
 

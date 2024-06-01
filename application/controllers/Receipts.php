@@ -778,7 +778,7 @@ class Receipts extends CI_Controller{
 			$finalarr=array();
 			foreach ($details as $dkey=>$dval):
 				$finalarr[$dkey]['date']=$dval['date'];
-				$finalarr[$dkey]['narration']=$dval['name'].', '. $dval['address'].', '.$dval['city_pin'].', Ph: '.$dval['phone'].', '. $dval['id_name'].': '. $dval['id_no'].', '. $dval['pmt_details'].', Tr Date: '.$dval['tr_date'];
+				$finalarr[$dkey]['narration']=$dval['name'].', '. $dval['address'].', '.$dval['city_pin'].', Ph: '.$dval['phone'].', '. $dval['id_name'].': '. $dval['id_no'].', '. $dval['pmt_details'].', Tr Date: '.$dval['tr_date'].', Ch No: '.$dval['ch_no'];
 				$finalarr[$dkey]['vtype']='Receipt1';
 				$finalarr[$dkey]['vnumber']=$dval['series'].'-'.$dval['no'];
 				$finalarr[$dkey]['edate']=$dval['date'];
