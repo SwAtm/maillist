@@ -5,7 +5,7 @@ $lm=10;
 $font='Arial';
 $fs=14;
 //$tm=15;
-$tm=12;
+$tm=13.5;
 $pdf->setTopMargin($tm);
 $pdf->setLeftMargin($lm);
 $pdf->SetAutoPageBreak(false);
@@ -73,7 +73,7 @@ $pdf->SetLeftMargin($lm);
 		$pdf->AddPage('P',array(210,297));
 		//$pdf->SetY(15);
 	else:
-		$pdf->SetY($y+11.25);
+		$pdf->SetY($y+9.75);
 	endif;
 endif;
 endforeach;
