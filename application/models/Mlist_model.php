@@ -225,7 +225,20 @@ class Mlist_model extends CI_Model{
 		
 		}
 
-
+		public function panexists($pan){
+		//called by mlist/checkpan
+		$sql=$this->db->select ('name');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where('id_no',$pan);
+		$sql=$this->db->get();
+		//$result= $sql->result();
+		if ($sql && $sql->num_rows()>0):
+		return true;
+		else:
+		return false;
+		endif;	
+		
+		}
 
 
 }

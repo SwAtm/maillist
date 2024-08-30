@@ -6,7 +6,7 @@ class Mlist extends CI_Controller{
 		$this->load->database();
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
-		//$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(TRUE);
 		$this->load->library('session');
 		$this->load->model('mlist_model');
 		$this->load->model('city_model');
@@ -16,7 +16,8 @@ class Mlist extends CI_Controller{
 		$this->load->helper('pdf_helper');
 		$this->load->model('Mlist_model');
 		$this->load->model('id_type_model');
-		//$this->load->library('form_validation');	
+		$this->load->model('token_model');
+		$this->load->library('form_validation');	
 }
 
 	public function list_admin()
@@ -68,7 +69,7 @@ class Mlist extends CI_Controller{
 
 			
                
-		$output->extra="<table width = 100% bgcolor=pink><tr><td align = center><a href = ".site_url('mlist/mlistadd').">Add Recepient</a href></td></tr></table>";			
+		$output->extra="<table width = 100% bgcolor=pink><tr><td align = center><a href = ".site_url('mlist/mlistaddwopan').">Add Recepient wo PAN</a href></td><td align = center><a href = ".site_url('mlist/mlistaddpan').">Add Recepient with PAN</a href></td></tr></table>";			
 			
 			//$output = $crud->render();
 			$this->_example_output_extra($output);                
@@ -245,7 +246,7 @@ class Mlist extends CI_Controller{
 	echo "<br><a href=".site_url('login/home').">Go Home</a>";
 	
 }
-	//not necessary, the option is removed
+	
 	public function list_guest()
 	{
 	$crud = new grocery_CRUD();
@@ -340,7 +341,7 @@ class Mlist extends CI_Controller{
 			
 		}	
 
-		public function mlistadd() {
+		public function mlistaddwopan() {
 		
 		
 		$this->form_validation->set_rules('name', 'Name', 'required');
@@ -349,14 +350,23 @@ class Mlist extends CI_Controller{
 		$this->form_validation->set_rules('state', 'State Name', 'required');
 		$this->form_validation->set_rules('country', 'Country Name', 'required');
 		$this->form_validation->set_rules('id_no', 'ID No', 'callback_idcheck');
-		$data['idtype']= $this->id_type_model->list_all();
+		$idtype= $this->id_type_model->list_all();
+		
+		//remove pan
+		foreach ($idtype as $idt):
+		if ($idt == "PAN"):
+		unset ($idtype[$idt]);
+		endif;
+		endforeach;
+		unset($idt);
+		$data['idtype']= $idtype;
 		$data['yesno'] = array('Y'=>'Yes', 'N'=>'No');
 		$data['city_india'] = $this->city_model->get_name_indian();
 		$data['city_non_india'] = $this->city_model->get_name_non_indian();
 		//new
 		if ($this->form_validation->run()==false):
 			$this->load->view('templates/header');
-			$this->load->view('mlist/mlistadd', $data);
+			$this->load->view('mlist/mlistaddwopan', $data);
 			$this->load->view('templates/footer');
 		else:
 			//all ok, prep
@@ -409,9 +419,9 @@ class Mlist extends CI_Controller{
 			elseif ($this->input->post('id_name')!=='NOT AVAILABLE' and $str==''):
 				$this->form_validation->set_message('idcheck', 'Please provide ID No');
 				return false;	
-			elseif ($this->input->post('id_name')=='PAN' and !preg_match('/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',$str)):
+			/*elseif ($this->input->post('id_name')=='PAN' and !preg_match('/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',$str)):
 				$this->form_validation->set_message('idcheck', 'PAN Pattern mismatch');
-				return false;		
+				return false;*/		
 			elseif ($this->input->post('id_name')=='ADHAAR' and !preg_match('/^[0-9]{12}$/',$str)):
 				$this->form_validation->set_message('idcheck', 'ADHAAR Pattern mismatch');
 				return false;			
@@ -419,10 +429,199 @@ class Mlist extends CI_Controller{
 			//$this->input->post('id_no')=$str;
 			return true;
 			endif;
+		}
 		
-		
-		
+		public function mlistaddpan($pan=''){
+		$this->form_validation->set_rules('pan', 'PAN', 'callback_checkpan');	
+		//$this->form_validation->set_rules('pan', 'PAN', 'callback_checkpan');	
+		if ($this->form_validation->run()==false):
+			$this->load->view('templates/header');
+			$this->load->view('mlist/mlistaddpan');
+			$this->load->view('templates/footer');
+		else:
+			$this->load->view('templates/header');
+			$timest=$this->token_model->getall();
+			//echo "<br>".$_POST['pan']."<br>";
+			$pan=strtoupper($_POST['pan']);
+			//unset($_POST['pan']);
+			//echo $pan."<br>";
+			//echo "present time stamp: ".strtotime($timest['timestamp'])."<br>";;
+			//echo "timestamp + 24 Hrs".(strtotime($timest['timestamp'])+86400)."<br>";
+			//echo "<br>".time()."<br>";
+			//print_r($timest);
+			//echo "Hi";
+			
+			if(strtotime($timest['timestamp'])+86400<time()):
+				//token is invalid. Get new token
+				//echo "present time stamp: ".strtotime($timest['timestamp'])."<br>";;
+				//echo "present + 24 Hrs".(strtotime($timest['timestamp'])+86400)."<br>";
+				//echo "<br>".time()."<br>";
+				$cid=$timest['cid'];
+				$skey=$timest['skey'];
+				if ($atoken=$this->gettoken($cid, $skey)):
+				$tokenupdate=array('atoken'=>$atoken);
+				$this->token_model->updatetoken($tokenupdate);	
+				//echo "<br>".$atoken;
+				else:
+				//failed to fetch token
+				$this->load->view('templates/header');
+				echo "Falied to fetch token";
+				$this->load->view('templates/footer');		
+				endif;
+			else:
+				//token is valid.
+				//echo "Valid token"."<br>";
+				//echo "present time stamp: ".strtotime($timest['timestamp'])."<br>";;
+				//echo "present + 24 Hrs".(strtotime($timest['timestamp'])+86400)."<br>";
+				//echo "<br>".time().$pan."<br>";
+				$atoken=$timest['atoken'];
+				$cid=$timest['cid'];
+				$skey=$timest['skey'];
+			endif;	
+		$this->getpan($pan, $atoken, $skey);
+			
+		endif;		
+		//$this->load->view('templates/footer');		
+				
+						
+	}
+		public function gettoken($cid, $skey){
+				
+				// Generated by curl-to-PHP: http://incarnate.github.io/curl-to-php/
+				$ch = curl_init();
+
+				curl_setopt($ch, CURLOPT_URL, 'https://production.deepvue.tech/v1/authorize');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=$cid&client_secret=$skey");
+
+				$headers = array();
+				$headers[] = 'Accept: application/json';
+				$headers[] = 'Content-Type: application/x-www-form-urlencoded';
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+				$result = curl_exec($ch);
+				if (curl_errno($ch)) {
+					//echo 'Error:' . curl_error($ch);
+					return false;
+				} else {
+					//echo $result;
+					return json_decode($result)->access_token;
+				}
+				curl_close($ch);
+				}
+				
+		public function getpan($pan, $atoken, $skey){
+				
+				// Generated by curl-to-PHP: http://incarnate.github.io/curl-to-php/
+					$ch = curl_init();
+
+					curl_setopt($ch, CURLOPT_URL, "https://production.deepvue.tech/v1/verification/panbasic?pan_number=$pan");
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+
+
+					$headers = array();
+					$headers[] = "Authorization: Bearer $atoken";
+					$headers[] = "X-Api-Key: $skey";
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+					$result = curl_exec($ch);
+					if (!isset(json_decode($result)->code) or json_decode($result)->code!=200 or json_decode($result)->data->status=='INVALID') {
+						//(curl_errno($ch) or json_decode($result)->data->status=='INVALID') {
+						//echo '<br> Error:' . curl_error($ch);
+						//print_r($result);
+						//echo "<br>".$pan."<br>";
+						$data['pan']=$pan;
+						$data['name']='Error fetching name';
+					} else {
+						//echo "<br>".$result;
+						$data['pan']=$pan;
+						$data['name']=json_decode($result)->data->name_information->pan_name_cleaned;
+					}
+					curl_close($ch);
+
+				//$this->load->view('templates/header');	
+				$this->load->view('mlist/mlistaddpan1', $data);	
+				$this->load->view('templates/footer');	
 		
 		}
+
+		public function checkpan ($pan){
+		if (trim($pan)==''):
+			$this->form_validation->set_message('checkpan', 'PAN cannot be blank');
+				return false;
+		elseif(!preg_match('/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',strtoupper($pan))):
+				$this->form_validation->set_message('checkpan', 'PAN Pattern mismatch');
+				return false;
+		elseif($this->mlist_model->panexists($pan)):
+				$this->form_validation->set_message('checkpan', 'PAN Already Exists');
+				return false;
+		else:
+		return true;
+		endif;
+		}
+		
+		public function mlistaddpan1()
+		{
+		$data['pan']=$this->input->post('pan');	
+		$data['name']=$this->input->post('name');
+		$data['yesno'] = array('Y'=>'Yes', 'N'=>'No');
+		$data['city_india'] = $this->city_model->get_name_indian();
+		$data['city_non_india'] = $this->city_model->get_name_non_indian();
+		if ($this->input->post('city')):
+		$this->form_validation->set_rules('city', 'City Name', 'required');
+		$this->form_validation->set_rules('dist', 'District Name', 'required');
+		$this->form_validation->set_rules('state', 'State Name', 'required');
+		$this->form_validation->set_rules('country', 'Country Name', 'required');	
+		endif;
+		//new
+		if ($this->form_validation->run()==false):
+			$this->load->view('templates/header');
+			$this->load->view('mlist/mlistaddpan2', $data);
+			$this->load->view('templates/footer');
+		else:
+			//all ok, prep
+			//all cap
+			$data=$_POST;
+			foreach ($data as $k=>$v):
+				$data[$k] = strtoupper($v);
+			endforeach;
+			//id no, code
+			$data['id_code'] = "1";
+			$data['id_no']=$data['pan'];
+			$data['id_name']="PAN";
+			$data['panchecked']="Y";
+			unset($data['pan']);
+			//if city, district, state, country are new, add to resp tables
+			//city dropdown is coming from city table. No need to check and add to city table.
+			/*
+			if (!$this->city_model->findname($data['city'])):
+				$city['name'] = $data['city'];
+				$this->city_model->add($city);
+			endif;	*/
+			
+			if (!$this->district_model->findname($data['dist'])):
+				$dist['name'] = $data['dist'];
+				$this->district_model->add($dist);
+			endif;	
+			
+			if (!$this->state_model->findname($data['state'])):
+				$state['name'] = $data['state'];
+				$this->state_model->add($state);
+			endif;	
+			
+			if (!$this->country_model->findname($data['country'])):
+				$country['name'] = $data['country'];
+				$this->country_model->add($country);
+			endif;	
+			//add to mlist
+			$this->mlist_model->add($data);
+			echo "Data added successfully";
+			$this->load->view('templates/footer');
+		endif;
+		
+		}
+
 }
 ?>

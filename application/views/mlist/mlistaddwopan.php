@@ -19,8 +19,8 @@ var citynonindia = <?php echo json_encode($city_non_india);?>;
 
 
 <?php
-echo form_open('mlist/mlistadd');
-echo validation_errors()?>
+echo form_open('mlist/mlistaddwopan');
+echo validation_errors();?>
 <tr><fieldset>
 	<legend align = "center" style = "color:blue"><b>Address and Contact</b></legend>
 <td><label for "hon">Hon.</label></td>
