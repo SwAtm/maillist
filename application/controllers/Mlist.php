@@ -6,7 +6,7 @@ class Mlist extends CI_Controller{
 		$this->load->database();
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 		$this->load->library('session');
 		$this->load->model('mlist_model');
 		$this->load->model('city_model');
