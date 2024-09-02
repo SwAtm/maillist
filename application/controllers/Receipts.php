@@ -105,6 +105,11 @@ class Receipts extends CI_Controller{
 		$id=$_POST['id'];
 		endif;
 		$donor=$this->Mlist_model->get_details($id);
+			if($donor['deleted']=='Y'):
+				$this->session->set_flashdata('message_deleted', 'This is a deleted recepient. Cannot Add');
+				redirect("login/home");
+				$this->session->flashdata('message_deleted');
+			endif;	
 		$purpose1=$this->Daccount_model->list_all();
 		//remove indexes from array
 		foreach ($purpose1 as $k=>$v):

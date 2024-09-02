@@ -111,6 +111,9 @@ window.location.href=url
 
 <?php
 Print "</td></tr></table>";
+if ($this->session->flashdata('message_deleted')):
+	echo $this->session->flashdata('message_deleted');
+endif;
 ?>
 </body>
 </html>
