@@ -26,7 +26,7 @@ class Mlist extends CI_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('mlist')
 		     ->set_subject('Recepient')
-			 ->columns('id', 'name', 'add1', 'add2', 'city', 'phone1', 'id_no')
+			 ->columns('id', 'name', 'add1', 'add2', 'city', 'phone1', 'phone2', 'id_no')
 			 ->display_as('id','Id')
  			 ->display_as('name','Name')
 			 ->display_as('add1', 'Address1')
