@@ -230,6 +230,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->select ('name');
 		$sql=$this->db->from('mlist');
 		$sql=$this->db->where('id_no',$pan);
+		$sql=$this->db->where('deleted !=','Y');
 		$sql=$this->db->get();
 		//$result= $sql->result();
 		if ($sql && $sql->num_rows()>0):
