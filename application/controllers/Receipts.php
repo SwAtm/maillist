@@ -106,9 +106,9 @@ class Receipts extends CI_Controller{
 		endif;
 		$donor=$this->Mlist_model->get_details($id);
 			if($donor['deleted']=='Y'):
-				$this->session->set_flashdata('message_deleted', 'This is a deleted recepient. Cannot Add');
+				$this->session->set_flashdata('message', 'This is a deleted recepient. Cannot Add');
 				redirect("login/home");
-				$this->session->flashdata('message_deleted');
+				//$this->session->flashdata('message_deleted');
 			endif;	
 		$purpose1=$this->Daccount_model->list_all();
 		//remove indexes from array
@@ -159,7 +159,11 @@ class Receipts extends CI_Controller{
 	
 	// submitted OK
 	else:
-		
+		if (!isset($_POST)):
+		//resubmission has happened
+			$this->session->set_flashdata('message', 'Receipt was resubmitted');
+			redirect('login/home');
+		endif;
 		unset($_POST['id']);
 		
 		$mop=$_POST['mode_payment'];
@@ -199,6 +203,7 @@ class Receipts extends CI_Controller{
 		$_POST['user']=$this->session->logged;
 		unset($_POST['submit']);
 		if ($this->Receipts_model->adddata($_POST)):
+			unset($_POST);
 			$rid1=$this->Receipts_model->getmaxid();
 			$rid=$rid1['id'];
 			$this->rprint($rid);
