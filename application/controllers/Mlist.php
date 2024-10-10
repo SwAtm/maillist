@@ -592,6 +592,7 @@ class Mlist extends CI_Controller{
 			$data['id_no']=$data['pan'];
 			$data['id_name']="PAN";
 			$data['panchecked']="Y";
+			$data['panname']=$data['name'];
 			unset($data['pan']);
 			//if city, district, state, country are new, add to resp tables
 			//city dropdown is coming from city table. No need to check and add to city table.
