@@ -101,6 +101,12 @@ class Receipts extends CI_Controller{
 	$this->form_validation->set_rules('mode_payment','Mode of Payment','required');
 	//not submitted
 	if ($this->form_validation->run()==false) :
+		
+		if (!isset($_POST['id']) and !isset($id)):
+		//resubmission has happened
+			$this->session->set_flashdata('message', 'Receipt was resubmitted');
+			redirect('login/home');
+		endif;
 		if (isset($_POST['id'])):
 		$id=$_POST['id'];
 		endif;
@@ -159,7 +165,7 @@ class Receipts extends CI_Controller{
 	
 	// submitted OK
 	else:
-		if (!isset($_POST)):
+		if (!isset($_POST) or empty($_POST)):
 		//resubmission has happened
 			$this->session->set_flashdata('message', 'Receipt was resubmitted');
 			redirect('login/home');
@@ -202,12 +208,12 @@ class Receipts extends CI_Controller{
 		endif;
 		$_POST['user']=$this->session->logged;
 		unset($_POST['submit']);
-		if ($this->Receipts_model->adddata($_POST)):
-			unset($_POST);
+		$postadd=$_POST;
+		unset($_POST);
+		if ($this->Receipts_model->adddata($postadd)):
 			$rid1=$this->Receipts_model->getmaxid();
 			$rid=$rid1['id'];
 			$this->rprint($rid);
-			
 		else:
 			Die("Something Wrong <a href=".site_url('login/home').">Go Home</a>");
 		endif;
