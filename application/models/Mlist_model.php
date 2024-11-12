@@ -87,6 +87,33 @@ class Mlist_model extends CI_Model{
 		return $sql->result_array();
 	}
 	
+		public function getnorthkarn($dist)
+		//called by mlist/labels_northkarn
+	{
+		$sql=$this->db->select ('id, hon , name, add1, add2, add3, add4, city, pin');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where_in('dist',$dist);
+		$sql=$this->db->where('deleted','N');
+		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->get();
+		return $sql->result_array();
+	}	
+
+		public function getkar_wo_northkarn($dist)
+		//called by mlist/labels_kar_wo_northkarn()
+	{
+		$sql=$this->db->select ('id, hon , name, add1, add2, add3, add4, city, pin');
+		$sql=$this->db->from('mlist');
+		$sql=$this->db->where_not_in('dist',$dist);
+		$sql=$this->db->where('state','KARNATAKA');
+		$sql=$this->db->where('deleted','N');
+		$sql=$this->db->where('send','Y');
+		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->get();
+		return $sql->result_array();
+	}	
+		
 		public function getkar()
 		//called by mlist/labels_kar
 	{
