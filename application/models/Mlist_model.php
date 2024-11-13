@@ -54,7 +54,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('city','BANGALORE');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
@@ -68,7 +68,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('city','BELGAUM');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
@@ -82,7 +82,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('dist','BELGAUM');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
@@ -95,7 +95,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where_in('dist',$dist);
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}	
@@ -109,7 +109,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('state','KARNATAKA');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}	
@@ -122,7 +122,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('state','KARNATAKA');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
@@ -135,7 +135,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('country','INDIA');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
@@ -151,7 +151,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('city!=','BELGAUM');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
@@ -165,7 +165,7 @@ class Mlist_model extends CI_Model{
 		$sql=$this->db->where('state!=','KARNATAKA');
 		$sql=$this->db->where('deleted','N');
 		$sql=$this->db->where('send','Y');
-		$sql=$this->db->order_by('name','ASC');
+		$sql=$this->db->order_by('pin','ASC');
 		$sql=$this->db->get();
 		return $sql->result_array();
 	}
