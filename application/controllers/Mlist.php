@@ -302,7 +302,7 @@ class Mlist extends CI_Controller{
 		
 		public function labels_northkarn()
 		{
-		$dist=array('BELAGAVI', 'BELGAUM', 'BAGALKOT', 'DHARWAD', 'GADAG', 'GULBARGA', 'VIJAYAPUR', 'KALABURGI', 'BIDAR', 'KOPPAL', 'JAMAKHANDI', 'VIJAYANAGAR', 'VIJAPUR(KAR)', 'BIJAPUR');
+		$dist=array('BELAGAVI', 'BELGAUM', 'BAGALKOT', 'BELLARY', 'DHARWAD', 'GADAG', 'GULBARGA', 'VIJAYAPUR', 'KALABURGI', 'BIDAR', 'KOPPAL', 'JAMAKHANDI', 'VIJAYANAGAR', 'VIJAPUR(KAR)', 'BIJAPUR');
 		$data['addresses']=$this->mlist_model->getnorthkarn($dist);
 		$data['place']='North_Karnataka';
 		$this->load->view('mlist/lables',$data);
@@ -313,7 +313,7 @@ class Mlist extends CI_Controller{
 		
 		public function labels_kar_wo_northkarn()
 		{
-		$dist=array('BELAGAVI', 'BELGAUM', 'BAGALKOT', 'DHARWAD', 'GADAG', 'GULBARGA', 'VIJAYAPUR', 'KALABURGI', 'BIDAR', 'KOPPAL', 'JAMAKHANDI', 'VIJAYANAGAR', 'VIJAPUR(KAR)', 'BIJAPUR');
+		$dist=array('BELAGAVI', 'BELGAUM', 'BAGALKOT', 'BELLARY', 'DHARWAD', 'GADAG', 'GULBARGA', 'VIJAYAPUR', 'KALABURGI', 'BIDAR', 'KOPPAL', 'JAMAKHANDI', 'VIJAYANAGAR', 'VIJAPUR(KAR)', 'BIJAPUR');
 		$data['addresses']=$this->mlist_model->getkar_wo_northkarn($dist);
 		$data['place']='Karnataka_wo_North_Karnataka';
 		$this->load->view('mlist/lables',$data);
