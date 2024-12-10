@@ -43,7 +43,7 @@ $(document).ready(function() {
 if(isset($_POST['submit'])):
 echo validation_errors();
 endif;
-echo form_open('receipts/add_receipt_wid_donor_found',array('id'=>'donation'));
+echo form_open('receipts/add_receipt_wid_donor_found',array('id'=>'donation'), array('panname'=>$panname));
 echo "<table border=1 align=center>";
 echo "<tr><td>ID Name</td><td colspan=3>".form_input(array('name'=>'id_name','value'=>isset($id_name)?$id_name:set_value('id_name'),'maxlength'=>'35', 'id'=>'id_name', 'readonly'=>'true'))."</td></tr>";
 echo "<tr><td>ID No</td><td colspan=3>".form_input(array('name'=>'id_no','value'=>isset($id_no)?$id_no:set_value('id_no'),'maxlength'=>'35', 'id'=>'id_no', 'readonly'=>'true'))."</td></tr>";

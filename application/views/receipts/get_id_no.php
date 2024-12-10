@@ -13,4 +13,10 @@ echo form_close();
 	document.forms['getadhar'].elements['id_no'].focus();
 	</script>
 <?php
+
+if ($this->session->flashdata('message')):
+	Print "<table><tr></tr><tr></tr><tr><td align=center>";
+	echo $this->session->flashdata('message');
+print "</td></tr></table>";
+endif;
 ?>

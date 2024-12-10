@@ -6,7 +6,7 @@ class Token_model extends CI_Model{
 	}
 	
 	public function getall(){
-	//called by mlist/mlistaddpan
+	//called by mlist/mlistaddpan, receipts/getpanname
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('token');
 	$sql=$this->db->get();
@@ -15,7 +15,7 @@ class Token_model extends CI_Model{
 }
 
 	public function updatetoken($tokenupdate){
-	//called by mlist/mlistaddpan
+	//called by mlist/mlistaddpan, receipt/getpanname
 	$this->db->update('token',$tokenupdate);	
 }
 	}

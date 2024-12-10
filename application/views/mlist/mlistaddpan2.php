@@ -26,7 +26,7 @@ echo validation_errors();?>
 <td><label for "hon">Hon.</label></td>
 <td><input type = "text" id = "hon" name = "hon" value = "<?php echo set_value('hon')?>" size = "35" maxlength = "4" autofocus></td>
 <td><label for "name">Name</label></td>
-<td><input type = "text" id = "name" name = "name" value = "<?php echo set_value('name')?>" size = "45" maxlength = "30" readonly ></td>
+<td><input type = "text" id = "name" name = "name" value = "<?php echo set_value('name')?>" size = "45"  readonly ></td>
 <td><label for "add1">Add 1</label></td>
 <td><input type = "text" id = "add1" name = "add1" value = "<?php echo set_value('add1')?>" size = "45" maxlength = "35"></td>
 </tr>

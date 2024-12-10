@@ -465,25 +465,13 @@ class Mlist extends CI_Controller{
 			$timest=$this->token_model->getall();
 			//echo "<br>".$_POST['pan']."<br>";
 			$pan=strtoupper($_POST['pan']);
-			//unset($_POST['pan']);
-			//echo $pan."<br>";
-			//echo "present time stamp: ".strtotime($timest['timestamp'])."<br>";;
-			//echo "timestamp + 24 Hrs".(strtotime($timest['timestamp'])+86400)."<br>";
-			//echo "<br>".time()."<br>";
-			//print_r($timest);
-			//echo "Hi";
-			
 			if(strtotime($timest['timestamp'])+86400<time()):
 				//token is invalid. Get new token
-				//echo "present time stamp: ".strtotime($timest['timestamp'])."<br>";;
-				//echo "present + 24 Hrs".(strtotime($timest['timestamp'])+86400)."<br>";
-				//echo "<br>".time()."<br>";
 				$cid=$timest['cid'];
 				$skey=$timest['skey'];
 				if ($atoken=$this->gettoken($cid, $skey)):
 				$tokenupdate=array('atoken'=>$atoken);
 				$this->token_model->updatetoken($tokenupdate);	
-				//echo "<br>".$atoken;
 				else:
 				//failed to fetch token
 				$this->load->view('templates/header');
@@ -492,19 +480,14 @@ class Mlist extends CI_Controller{
 				endif;
 			else:
 				//token is valid.
-				//echo "Valid token"."<br>";
-				//echo "present time stamp: ".strtotime($timest['timestamp'])."<br>";;
-				//echo "present + 24 Hrs".(strtotime($timest['timestamp'])+86400)."<br>";
-				//echo "<br>".time().$pan."<br>";
 				$atoken=$timest['atoken'];
 				$cid=$timest['cid'];
 				$skey=$timest['skey'];
 			endif;	
-		$this->getpan($pan, $atoken, $skey);
-			
+		$data=$this->getpan($pan, $atoken, $skey);
+		$this->load->view('mlist/mlistaddpan1', $data);	
+		$this->load->view('templates/footer');		
 		endif;		
-		//$this->load->view('templates/footer');		
-				
 						
 	}
 		public function gettoken($cid, $skey){
@@ -550,23 +533,19 @@ class Mlist extends CI_Controller{
 
 					$result = curl_exec($ch);
 					if (!isset(json_decode($result)->code) or json_decode($result)->code!=200 or json_decode($result)->data->status=='INVALID') {
-						//(curl_errno($ch) or json_decode($result)->data->status=='INVALID') {
-						//echo '<br> Error:' . curl_error($ch);
-						//print_r($result);
-						//echo "<br>".$pan."<br>";
 						$data['pan']=$pan;
 						$data['name']='Error fetching name';
 					} else {
 						//echo "<br>".$result;
 						$data['pan']=$pan;
 						$data['name']=json_decode($result)->data->name_information->pan_name_cleaned;
+						$replace = array('<P>','</P>');
+						$data['name']=str_replace($replace,'',$data['name']);
 					}
 					curl_close($ch);
-
+				return $data;
 				//$this->load->view('templates/header');	
-				$this->load->view('mlist/mlistaddpan1', $data);	
-				$this->load->view('templates/footer');	
-		
+						
 		}
 
 		public function checkpan ($pan){

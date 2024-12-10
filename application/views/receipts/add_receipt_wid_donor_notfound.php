@@ -13,8 +13,8 @@ $(document).ready(function() {
             }
         });
         
-        document.forms['donation'].elements['name'].focus();
-        document.forms['donation'].elements['name'].select();
+        document.forms['donation'].elements['id_no'].focus();
+        //document.forms['donation'].elements['name'].select();
 
 		$("#mop").change(function() {
 			//if ($(this).val() == "ECS") {
@@ -43,10 +43,10 @@ $(document).ready(function() {
 if(isset($_POST['submit'])):
 echo validation_errors();
 endif;
-echo form_open('receipts/add_receipt_wid_donor_notfound',array('id'=>'donation'),array('id_no'=>$id_no));
+echo form_open('receipts/add_receipt_wid_donor_notfound',array('id'=>'donation'));
 echo "<table border=1 align=center>";
 echo "<tr><td>ID No</td><td colspan=3>".form_input(array('name'=>'id_no','value'=>(isset($id_no)?$id_no:set_value('id_no')),'maxlength'=>'35', 'id'=>'id_no', 'readonly'=>'true'))."</td></tr>";
-echo "<tr><td>Name</td><td colspan=3>".form_input(array('name'=>'name','value'=>set_value('name'),'maxlength'=>'35', 'id'=>'name'))."</td></tr>";
+echo "<tr><td>Name</td><td colspan=3>".form_input(array('name'=>'name','value'=>(isset($name)?$name:set_value('name')),'maxlength'=>'35', 'id'=>'name'))."</td></tr>";
 echo "<tr><td>Address</td><td colspan=3>".form_input(array('name'=>'address','value'=>set_value('address'),'maxlength'=>'150', 'id'=>'address'))."</td></tr>";
 echo "<tr><td>City_Pin</td><td colspan=3>".form_input(array('name'=>'city_pin','value'=>set_value('city_pin'),'maxlength'=>'35', 'id'=>'city_pin'))."</td></tr>";
 echo "<tr><td>Phone No</td><td colspan=3>".form_input(array('name'=>'phone','value'=>set_value('phone'),'maxlength'=>'30', 'id'=>'phone'))."</td></tr>";
@@ -63,9 +63,6 @@ echo "</td></tr><tr><td>Details</td><td colspan=3>".form_input(array('name'=>'pm
 echo "<tr><td colspan=4 align=center>".form_submit('submit','Submit')."</td></tr>";
 echo "</table>";
 echo form_close();
-
-
-
 
 ?>
 
