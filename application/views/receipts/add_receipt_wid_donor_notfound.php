@@ -13,7 +13,7 @@ $(document).ready(function() {
             }
         });
         
-        document.forms['donation'].elements['id_no'].focus();
+        document.forms['donation'].elements['name'].focus();
         //document.forms['donation'].elements['name'].select();
 
 		$("#mop").change(function() {
@@ -46,7 +46,11 @@ endif;
 echo form_open('receipts/add_receipt_wid_donor_notfound',array('id'=>'donation'));
 echo "<table border=1 align=center>";
 echo "<tr><td>ID No</td><td colspan=3>".form_input(array('name'=>'id_no','value'=>(isset($id_no)?$id_no:set_value('id_no')),'maxlength'=>'35', 'id'=>'id_no', 'readonly'=>'true'))."</td></tr>";
-echo "<tr><td>Name</td><td colspan=3>".form_input(array('name'=>'name','value'=>(isset($name)?$name:set_value('name')),'maxlength'=>'35', 'id'=>'name'))."</td></tr>";
+if (isset($id_no) and strlen($id_no)==12):
+echo "<tr><td>Name</td><td colspan=3>".form_input(array('name'=>'name','value'=>(isset($name)?$name:set_value('name')),'size'=>'35', 'id'=>'name'))."</td></tr>";
+else:
+echo "<tr><td>Name</td><td colspan=3>".form_input(array('name'=>'name','value'=>(isset($name)?$name:set_value('name')),'size'=>'35', 'id'=>'name', 'readonly'=>'true'))."</td></tr>";
+endif;
 echo "<tr><td>Address</td><td colspan=3>".form_input(array('name'=>'address','value'=>set_value('address'),'maxlength'=>'150', 'id'=>'address'))."</td></tr>";
 echo "<tr><td>City_Pin</td><td colspan=3>".form_input(array('name'=>'city_pin','value'=>set_value('city_pin'),'maxlength'=>'35', 'id'=>'city_pin'))."</td></tr>";
 echo "<tr><td>Phone No</td><td colspan=3>".form_input(array('name'=>'phone','value'=>set_value('phone'),'maxlength'=>'30', 'id'=>'phone'))."</td></tr>";

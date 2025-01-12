@@ -37,6 +37,7 @@ class Mlist extends CI_Controller{
 			 ->unset_delete()
 			 ->unset_add()
 			 ->required_fields('name','city','dist','state','country','id_name')
+			 ->field_type('panname', 'readonly')
 			 ->field_type('city','dropdown', $this->city_model->list_all())
 			 ->field_type('state','dropdown', $this->state_model->list_all())
 			 ->field_type('dist','dropdown', $this->district_model->list_all())
