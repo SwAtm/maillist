@@ -36,14 +36,16 @@ class Mlist extends CI_Controller{
 			 ->unset_clone()
 			 ->unset_delete()
 			 ->unset_add()
-			 ->required_fields('name','city','dist','state','country','id_name')
+			 ->required_fields('name','city','dist','state','country')
 			 ->field_type('panname', 'readonly')
+			 ->field_type('id_name', 'readonly')	
+			 ->field_type('id_no', 'readonly')
+			 ->field_type('id_code', 'readonly')		
+			 ->field_type('pin', 'invisible')
 			 ->field_type('city','dropdown', $this->city_model->list_all())
 			 ->field_type('state','dropdown', $this->state_model->list_all())
 			 ->field_type('dist','dropdown', $this->district_model->list_all())
 			 ->field_type('country','dropdown', $this->country_model->list_all())
-			 ->field_type('id_name','dropdown', $this->id_type_model->list_all())
-			 ->field_type('id_code', 'invisible')		
 			 ->field_type('deleted','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('send','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('initiated','dropdown', array('Y'=>'Yes', 'N'=>'No'))
@@ -59,10 +61,10 @@ class Mlist extends CI_Controller{
 			 $crud->set_rules('id_name', 'ID Name', 'trim');
 			 $crud->set_rules('id_no', 'ID Number', 'trim'.$id_no_req);
 			 */
-			 $crud->set_rules('id_no', 'ID Number', 'callback_idcheck');
-			 $crud->set_rules('city', 'City', 'callback_checkcity', array('checkcity'=>'Country is India and given City is name of  a country'));
-			 $crud->set_rules('dist', 'District', 'callback_checkdistrict', array('checkdistrict'=>'Country is India and given District is name of a country'));
-			 $crud->set_rules('state', 'State', 'callback_checkstate', array('checkstate'=>'Country is India and given State  is name of a country'));
+			 //$crud->set_rules('id_no', 'ID Number', 'callback_idcheck');
+			 //$crud->set_rules('city', 'City', 'calback_checkcity', array('checkcity'=>'Country is India and given City is name of  a country'));
+			 //$crud->set_rules('dist', 'District', 'callback_checkdistrict', array('checkdistrict'=>'Country is India and given District is name of a country'));
+			 //$crud->set_rules('state', 'State', 'callback_checkstate', array('checkstate'=>'Country is India and given State  is name of a country'));
 			
 			
 			// Call render function
