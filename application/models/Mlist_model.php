@@ -268,7 +268,19 @@ class Mlist_model extends CI_Model{
 		
 		}
 
-
+		public function update_idno($toupdate, $id){
+		//called by mlist/update_idno
+		$sql=$this->db->set($toupdate);
+		$sql=$this->db->where('id',$id);
+		$sql=$this->db->update('mlist');
+		if ($sql && $this->db->affected_rows()>0):
+		return true;
+		else:
+		return false;
+		endif;	
+				
+			
+			}
 }
 
 

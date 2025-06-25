@@ -41,7 +41,8 @@ class Mlist extends CI_Controller{
 			 ->field_type('id_name', 'readonly')	
 			 ->field_type('id_no', 'readonly')
 			 ->field_type('id_code', 'readonly')		
-			 ->field_type('pin', 'invisible')
+			 ->field_type('panchecked', 'readonly')		
+			 //->field_type('pin', 'invisible')
 			 ->field_type('city','dropdown', $this->city_model->list_all())
 			 ->field_type('state','dropdown', $this->state_model->list_all())
 			 ->field_type('dist','dropdown', $this->district_model->list_all())
@@ -52,6 +53,7 @@ class Mlist extends CI_Controller{
 			 ->field_type('japayajna','dropdown', array('Y'=>'Yes', 'N'=>'No'))
 			 ->field_type('lang','dropdown', array('K'=>'Kannada', 'E'=>'English'))
 			 ->callback_column('name',array($this,'_callback_change_color'))
+			 ->callback_column('id_no',array($this,'_callback_getid'))
 			 ->add_action('receipt',base_url(IMGPATH.'rupee1.png'),'receipts/radd')
 			 ->callback_before_insert(array($this,'toupper'))
 			 ->callback_before_update(array($this,'toupper'));
@@ -117,6 +119,13 @@ class Mlist extends CI_Controller{
 	endif;
 	}
 	
+	public function _callback_getid($value, $row){
+	if ($row->id_no!=''):
+	return $value;
+	else:
+	return "<a href = ".site_url('Mlist/getid/'.$row->id).">Add id</a>";
+	endif;
+	}
 	/*
 	public function idreq($str){
 	if ($this->input->post('id_name') == 'NOT AVAILABLE'):
@@ -135,6 +144,57 @@ class Mlist extends CI_Controller{
 	
 	}
 	*/
+	public function  getid($id){
+	$this->session->id=$id;
+	$this->form_validation->set_rules('pan', 'PAN', 'callback_checkpan');	
+	//$this->form_validation->set_rules('pan', 'PAN', 'callback_checkpan');	
+		if ($this->form_validation->run()==false):
+			$this->load->view('templates/header');
+			$this->load->view('mlist/getid');
+			$this->load->view('templates/footer');
+		else:
+			$this->load->view('templates/header');
+			$timest=$this->token_model->getall();
+			//echo "<br>".$_POST['pan']."<br>";
+			$pan=strtoupper($_POST['pan']);
+			if(strtotime($timest['timestamp'])+86400<time()):
+				//token is invalid. Get new token
+				$cid=$timest['cid'];
+				$skey=$timest['skey'];
+				if ($atoken=$this->gettoken($cid, $skey)):
+				$tokenupdate=array('atoken'=>$atoken);
+				$this->token_model->updatetoken($tokenupdate);	
+				else:
+				//failed to fetch token
+				$this->load->view('templates/header');
+				echo "Falied to fetch token";
+				$this->load->view('templates/footer');		
+				endif;
+			else:
+				//token is valid.
+				$atoken=$timest['atoken'];
+				$cid=$timest['cid'];
+				$skey=$timest['skey'];
+			endif;	
+		$data=$this->getpan($pan, $atoken, $skey);
+		$this->load->view('mlist/mlistaddpan3', $data);	
+		$this->load->view('templates/footer');		
+		endif;		
+		
+	}
+	
+	public function update_idno(){
+	$idno=$this->input->post('pan');
+	$panname=$this->input->post('name');
+	$toupdate=array ('id_name'=>'PAN', 'id_no'=>$idno, 'id_code'=>1, 'panchecked'=>'Y', 'panname'=>$panname);
+	if ($this->Mlist_model->update_idno($toupdate, $this->session->id)):
+	echo "ID updated";
+	else:
+	echo "ID not updated";
+	endif;
+	unset ($this->session->id);
+	$this->load->view('templates/footer');
+	}
 	
 	public function checkcity($str){
 	
