@@ -19,4 +19,9 @@ echo validation_errors();?>
 <td align = "center"><input type = "submit" value = "Submit"></td>
 </tr>
 </table>
+<?php
+if ($this->session->flashdata('message')):
+	echo $this->session->flashdata('message');
+endif;
+?>
 </html>

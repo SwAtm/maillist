@@ -1,3 +1,4 @@
+
 <html>
 <?php
 Print "<table border=1 width=100% cellpadding=5 cellspacing=0>";
@@ -27,6 +28,11 @@ Print "<td  valign=centre align=middle>";
 <button onclick="window.location='<?php echo site_url();?>/receipts/monthly_report'">Report</button>
 <?php
 Print "</td></tr></table>";
+if ($this->session->flashdata('message')):
+	echo $this->session->flashdata('message');
+endif;
+
+
 ?>
 </body>
 </html>

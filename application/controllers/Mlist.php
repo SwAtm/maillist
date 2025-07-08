@@ -177,8 +177,14 @@ class Mlist extends CI_Controller{
 				$skey=$timest['skey'];
 			endif;	
 		$data=$this->getpan($pan, $atoken, $skey);
-		$this->load->view('mlist/mlistaddpan3', $data);	
-		$this->load->view('templates/footer');		
+			if($data['name']!='Error fetching name'):
+			$this->load->view('mlist/mlistaddpan3', $data);	
+			$this->load->view('templates/footer');		
+			else:
+			$this->session->set_flashdata('message', 'Error fetching name. Pl check id no: '. $data['pan']);
+			redirect('mlist/getid/'.$id);
+			endif;
+
 		endif;		
 		
 	}
@@ -548,8 +554,15 @@ class Mlist extends CI_Controller{
 				$skey=$timest['skey'];
 			endif;	
 		$data=$this->getpan($pan, $atoken, $skey);
-		$this->load->view('mlist/mlistaddpan1', $data);	
-		$this->load->view('templates/footer');		
+		
+			if($data['name']!='Error fetching name'):
+			$this->load->view('mlist/mlistaddpan1', $data);	
+			$this->load->view('templates/footer');		
+			else:
+			$this->session->set_flashdata('message', 'Error fetching name. Pl check id no: '. $data['pan']);
+			redirect('mlist/mlistaddpan');
+			endif;
+		
 		endif;		
 						
 	}
