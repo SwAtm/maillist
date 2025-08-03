@@ -6,7 +6,7 @@ class Mlist extends CI_Controller{
 		$this->load->database();
 		$this->load->helper('url');
 		$this->load->library('grocery_CRUD');
-		//$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(TRUE);
 		$this->load->library('session');
 		$this->load->model('mlist_model');
 		$this->load->model('city_model');
@@ -146,47 +146,80 @@ class Mlist extends CI_Controller{
 	*/
 	public function  getid($id){
 	$this->session->id=$id;
-	$this->form_validation->set_rules('pan', 'PAN', 'callback_checkpan');	
+	$this->form_validation->set_rules('idno', 'ID_No', 'callback_checkidno');	
 	//$this->form_validation->set_rules('pan', 'PAN', 'callback_checkpan');	
 		if ($this->form_validation->run()==false):
 			$this->load->view('templates/header');
 			$this->load->view('mlist/getid');
 			$this->load->view('templates/footer');
 		else:
-			$this->load->view('templates/header');
-			$timest=$this->token_model->getall();
-			//echo "<br>".$_POST['pan']."<br>";
-			$pan=strtoupper($_POST['pan']);
-			if(strtotime($timest['timestamp'])+86400<time()):
-				//token is invalid. Get new token
-				$cid=$timest['cid'];
-				$skey=$timest['skey'];
-				if ($atoken=$this->gettoken($cid, $skey)):
-				$tokenupdate=array('atoken'=>$atoken);
-				$this->token_model->updatetoken($tokenupdate);	
-				else:
-				//failed to fetch token
+			$idno=strtoupper($_POST['idno']);
+			//adhaar
+			if(strlen($idno)==12):
+				$toupdate=array ('id_name'=>'ADHAAR', 'id_no'=>$idno, 'id_code'=>2);
 				$this->load->view('templates/header');
-				echo "Falied to fetch token";
-				$this->load->view('templates/footer');		
+				if ($this->Mlist_model->update_idno($toupdate, $this->session->id)):
+				echo "ID updated";
+				else:
+				echo "ID not updated";
 				endif;
+				unset ($this->session->id);
+				$this->load->view('templates/footer');
+			
+			//pan
 			else:
-				//token is valid.
-				$atoken=$timest['atoken'];
-				$cid=$timest['cid'];
-				$skey=$timest['skey'];
-			endif;	
-		$data=$this->getpan($pan, $atoken, $skey);
-			if($data['name']!='Error fetching name'):
-			$this->load->view('mlist/mlistaddpan3', $data);	
-			$this->load->view('templates/footer');		
-			else:
-			$this->session->set_flashdata('message', 'Error fetching name. Pl check id no: '. $data['pan']);
-			redirect('mlist/getid/'.$id);
+				$this->load->view('templates/header');
+				$timest=$this->token_model->getall();
+				//echo "<br>".$_POST['pan']."<br>";
+				//$pan=strtoupper($_POST['idno']);
+				if(strtotime($timest['timestamp'])+86400<time()):
+					//token is invalid. Get new token
+					$cid=$timest['cid'];
+					$skey=$timest['skey'];
+					if ($atoken=$this->gettoken($cid, $skey)):
+					$tokenupdate=array('atoken'=>$atoken);
+					$this->token_model->updatetoken($tokenupdate);	
+					else:
+					//failed to fetch token
+					$this->load->view('templates/header');
+					echo "Falied to fetch token";
+					$this->load->view('templates/footer');		
+					endif;
+				else:
+					//token is valid.
+					$atoken=$timest['atoken'];
+					$cid=$timest['cid'];
+					$skey=$timest['skey'];
+				endif;	
+				$data=$this->getpan($idno, $atoken, $skey);
+				if($data['name']!='Error fetching name'):
+				$this->load->view('mlist/mlistaddpan3', $data);	
+				$this->load->view('templates/footer');		
+				else:
+				$this->session->set_flashdata('message', 'Error fetching name. Pl check id no: '. $data['pan']);
+				redirect('mlist/getid/'.$id);
+				endif;
 			endif;
-
 		endif;		
 		
+	}
+	
+	
+	public function checkidno($idno){
+		if (''==trim($idno) or empty($idno)):
+		$this->form_validation->set_message('checkidno', 'ID no Cannot be blank');
+		return false;
+		elseif(!preg_match('[^[A-Z]{5}[0-9]{4}[A-Z]{1}$]', trim(str_replace(' ','',strtoupper($idno)))) and !preg_match('[^[0-9]{12}$]', trim(str_replace(' ','',$idno)))):
+		$this->form_validation->set_message('checkidno', 'ID no pattern not matching');
+		return false;
+		elseif($this->mlist_model->panexists($idno)):
+		$this->form_validation->set_message('checkidno', 'PAN/Adhaar Already Exists');
+		return false;
+		else:
+		return true;
+		endif;
+			
+	
 	}
 	
 	public function update_idno(){

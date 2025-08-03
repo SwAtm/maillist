@@ -253,7 +253,7 @@ class Mlist_model extends CI_Model{
 		}
 
 		public function panexists($pan){
-		//called by mlist/checkpan
+		//called by mlist/checkpan, mlist/checkidno
 		$sql=$this->db->select ('name');
 		$sql=$this->db->from('mlist');
 		$sql=$this->db->where('id_no',$pan);
@@ -269,7 +269,7 @@ class Mlist_model extends CI_Model{
 		}
 
 		public function update_idno($toupdate, $id){
-		//called by mlist/update_idno
+		//called by mlist/update_idno, mlist/getid
 		$sql=$this->db->set($toupdate);
 		$sql=$this->db->where('id',$id);
 		$sql=$this->db->update('mlist');

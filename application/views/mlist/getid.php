@@ -14,8 +14,8 @@ table.table1 {
 <?php
 echo form_open('mlist/getid/'.$this->session->id);
 echo validation_errors();?>
-<tr><td><label for "pan">PAN</label></td>
-<td><input type = "text" id = "pan" name = "pan" value = "<?php echo set_value('pan')?>" size = "35" maxlength = "10" autofocus></td>
+<tr><td><label for "idno">PAN or Adhaar</label></td>
+<td><input type = "text" id = "idno" name = "idno" value = "<?php echo set_value('idno')?>" size = "35" maxlength = "12" autofocus></td>
 <td align = "center"><input type = "submit" value = "Submit"></td>
 </tr>
 </table>
